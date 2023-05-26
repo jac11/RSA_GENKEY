@@ -76,7 +76,7 @@ class RSA_algorithm:
         print("Massage : ",Plaintext)
     def Useage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument("-M",'--massage'   , action= None        ,help   = " path of Massage to Encrypit")
+        parser.add_argument("-M",'--massage'   , metavar=''          ,help   = " path of Massage to Encrypit")
         parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Massage")
         parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Massage")
         parser.add_argument("-H",'--hex'       , action="store_true" ,help   = "output Massage Encrypt Hex Format")
