@@ -7,6 +7,9 @@
 import random
 import math
 import base64
+import argparse
+import sys
+
 list_Str = []
 string  = "Welcome Back Jacstory to Home 23"
 for L in string :
@@ -31,44 +34,59 @@ list =[
      ]
 class RSA_algorithm:
     def __init__(self):
+        self.Useage()
         self.algorithm()
     def algorithm (self):
-        p = random.choice(list)
-        q = random.choice(list)
-        liste = []
-        if p == q:
-           p = random.choice(list)
-        n = p*q
-        QN = (p-1)*(q-1)
-        for e in range(int(QN)):
-            if 1< e < QN:
-               if math.gcd(QN,e) == 1:
-                    if e == p :
+        p_Num = random.choice(list)
+        q_Num = random.choice(list)
+        Public_key_list = []
+        if p_Num == q_Num:
+           p_Num = random.choice(list)
+        N_Num = p_Num * q_Num
+        QT_Num = (p_Num - 1) * (q_Num - 1)
+        for Public_key in range(int(QT_Num)):
+            if 1 < Public_key < QT_Num:
+               if math.gcd( QT_Num , Public_key ) == 1:
+                    if Public_key == p_Num :
            	           continue
                     else:
-            	        liste.append(e)
-        e = random.choice(liste)
-        for d in range(QN):
-            if (d*e)% QN ==1 :
-                if d == e :
-                  d +=1
+                        Public_key_list.append(Public_key)
+        Public_key = random.choice(Public_key_list)
+        for private_key in range (QT_Num) :
+            if (private_key * Public_key) % QT_Num == 1 :
+                if private_key  == Public_key :
+                   private_key +=1
                 else:    
                    break        
-        list_ency = []
-        list_chr = []
-        for m in list_Str :
-            C = (m**e)%n 
-            list_ency.append(C)
-        encrypit =str("".join(str(list_ency))).replace("[",'').replace(',','').replace("]",'') 
-        enbase64 = str(base64.b64encode(bytes(encrypit, 'utf-8'))).replace("b'",'').replace("'",'') 
-        Debaes64 =base64.b64decode(enbase64).decode("utf-8").split(" ")
-        for S in Debaes64 :
-            S = int(S)
-            D = (S**d)%n
-            chr_c = chr(D)
-            list_chr.append(chr_c)
-        text = "".join(list_chr)
-        print("C  : ", enbase64)
-        print("Massage : ",text)	 
+        list_Encrypt = []
+        list_Decrypt = []
+        for Mas in list_Str :
+           Ciphertext = ( Mas ** Public_key ) % N_Num
+           list_Encrypt.append(Ciphertext)
+        Encrypt =str("".join(str(list_Encrypt))).replace("[",'').replace(',','').replace("]",'') 
+        E_base64 = str(base64.b64encode(bytes(Encrypt, 'utf-8'))).replace("b'",'').replace("'",'') 
+        D_baes64 =base64.b64decode(E_base64).decode("utf-8").split(" ")
+        for Char in D_baes64 :
+            Char = int(Char)
+            Decrypt =chr((Char ** private_key ) % N_Num)
+            list_Decrypt.append(Decrypt)
+        Plaintext = "".join(list_Decrypt)
+        print("Decrypt : ", E_base64)
+        print("="*40)
+        print("Massage : ",Plaintext)
+    def Useage (self):
+        parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
+        parser.add_argument("-M",'--massage'   , action="store_true" ,help   = " path of Massage to Encrypit")
+        parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Massage")
+        parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Massage")
+        parser.add_argument("-H",'--hex'       , action="store_true" ,help   = "output Massage Encrypt Hex Format")
+        parser.add_argument("-B",'--base64'    , action="store_true" ,help   = "output Massage Encrypt Base64 Format")
+        parser.add_argument("-K",'--key'       , action="store_true" ,help   = "Genreagte Key public-key , Praivate-Key")
+        parser.add_argument("-L",'--len'       , action="store_true" ,help   = "length of the Key Genreagte")
+        if len(sys.argv)!=1 :
+            pass
+        else:
+            parser.print_help()         
+            exit()   	 
 if  __name__ == '__main__':
     RSA_algorithm()
