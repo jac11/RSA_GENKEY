@@ -11,10 +11,7 @@ import argparse
 import sys
 
 list_Str = []
-string  = "Welcome Back Jacstory to Home 23"
-for L in string :
-    Num_str = ord(L)
-    list_Str.append(Num_str)
+
 list =[
         1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051,
         1061, 1063, 1069, 1087, 1091, 1093, 1097, 1103, 1109,
@@ -36,7 +33,16 @@ class RSA_algorithm:
     def __init__(self):
         self.Useage()
         self.algorithm()
-    def algorithm (self):
+    def ReadMessage(self):   
+        try:
+            with open (self.args.message,'r') as readM:
+                Mas_txt = readM.read()
+            for L in Mas_txt :
+               Num_str =list_Str.append(ord(L))
+        except Exception :
+            print("[+] Error Read Meassage")  
+            exit() 
+    def Gen_PP(self):        
         p_Num = random.choice(list)
         q_Num = random.choice(list)
         Public_key_list = []
@@ -74,15 +80,21 @@ class RSA_algorithm:
         print("Decrypt : ", E_base64)
         print("="*40)
         print("Massage : ",Plaintext)
+    def algorithm (self):
+    	if self.args.message:
+    	   self.ReadMessage()
+    	   self.Gen_PP()
+            
     def Useage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument("-M",'--massage'   , metavar=''          ,help   = " path of Massage to Encrypit")
+        parser.add_argument("-M",'--message'   , metavar=''          ,help   = " path of Massage to Encrypit")
         parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Massage")
         parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Massage")
         parser.add_argument("-H",'--hex'       , action="store_true" ,help   = "output Massage Encrypt Hex Format")
         parser.add_argument("-B",'--base64'    , action="store_true" ,help   = "output Massage Encrypt Base64 Format")
         parser.add_argument("-K",'--key'       , action="store_true" ,help   = "Genreagte Key public-key , Praivate-Key")
         parser.add_argument("-L",'--len'       , action="store_true" ,help   = "length of the Key Genreagte")
+        self.args = parser.parse_args() 
         if len(sys.argv)!=1 :
             pass
         else:
