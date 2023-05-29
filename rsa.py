@@ -75,7 +75,7 @@ class RSA_algorithm:
         Value2 = str(private_key)+"-"+str(VKEY).replace("[",'').replace("]",'').replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
         Value2 = str(base64.b64encode(bytes(Value2, 'utf-8')))     
         Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56)).replace("\n",'',1).replace("b'",'').replace("'",'')
-        Style = "-"*20
+        Style = "#"+"-"*20+"#"
         if self.args.key or self.args.message:
             with open("./Public-key.pem" ,'w') as Publickey:
                 Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
@@ -85,7 +85,7 @@ class RSA_algorithm:
                 '\n'+Style+"END RSA PRIVATE KEY"+Style)                           
         self.N_Num       = N_Num 
         self.private_key = private_key
-        self.Public_key = Public_key                      
+        self.Public_key = Public_key                  
     def En_crypt_Message(self):                    
         list_Encrypt = []
         for Mas in list_Str :
@@ -107,24 +107,25 @@ class RSA_algorithm:
         list_Decrypt = []
         try : 
             with open ("Praivate-Key.pem",'r') as R_secret :            
-                secret_F = R_secret.read().split()
-            secret = str("".join(secret_F[5:-4]))
-            secret_F = base64.b64decode(secret).decode('utf8', errors='ignore').replace(" ",'').split("-")
+                secret_F = R_secret.read().replace("\n","").split("#")
+            secret = str("".join(secret_F[4:-4]))
+            secret_F = str(base64.b64decode(bytes(secret,'utf-8'))).replace(" ",'').replace("b'",'').replace("'",'').split("-")
             Key = secret_F
-            privateK = Key[0]
-            NKey= Key[-1][1:]
+            privateK = int(Key[0])
+            NKey= int(Key[-1][1:])
             if self.args.base64 :
                 with open(self.args.file,'r') as Ciphertext_R :
-                     DeCipher = Ciphertext_R.read()
+                     DeCipher = Ciphertext_R.read()     
                 D_baes64 = base64.b64decode(DeCipher).decode("utf-8").split(" ")
                 for Char in D_baes64 :
                     Char = int(Char)
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt)
                 Plaintext = "".join(list_Decrypt)
-                print(Plaintext)
-        except Exception as E:
-            print("[+] Error read File : ",E)                 
+                with open("Decrypt_Maessage.txt" ,'w') as Text :
+                      Text.write(Plaintext)
+        except IndexError as E:
+            print("[+] Error  : ",E)                 
     def algorithm (self):
         if self.args.message :
            self.ReadMessage()
