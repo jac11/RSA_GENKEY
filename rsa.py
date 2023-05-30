@@ -39,8 +39,8 @@ class RSA_algorithm:
                 Mas_txt = readM.read()
             for L in Mas_txt :
                Num_str =list_Str.append(ord(L))
-        except Exception :
-            print("[+] Error Read Meassage")  
+        except Exception as E :
+            print("[+] Error  : " , E)  
             exit() 
     def Gen_PP(self):  
         for V in range(0,10):
@@ -98,12 +98,11 @@ class RSA_algorithm:
                 DecryptW.write(E_base64)
         if  self.args.hex and self.args.enctypt :
             with open ("EncryptHEX.txt",'w') as HEXData :
-                pass
-            for Hex in list_Encrypt :
-                Hex  = hex(Hex)
-                with open ("EncryptHEX.txt",'a') as HEXData :
-                    HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
-    def De_crypt_Meassage(self):
+                for Hex in list_Encrypt :
+                    Hex  = hex(Hex)
+                    with open ("EncryptHEX.txt",'a') as HEXData :
+                       HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
+    def De_crypt_Message(self):
         list_Decrypt = []
         try : 
             with open ("Praivate-Key.pem",'r') as R_secret :            
@@ -124,6 +123,17 @@ class RSA_algorithm:
                 Plaintext = "".join(list_Decrypt)
                 with open("Decrypt_Maessage.txt" ,'w') as Text :
                       Text.write(Plaintext)
+            if self.args.hex:
+                with open(self.args.file,'r') as Ciphertext_R :
+                    DeCipher = Ciphertext_R.read().split(" ")
+                    DeCipher  = DeCipher[1:]
+                    for HEX in DeCipher :
+                        HEXTONUM = int(HEX,16)
+                        Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
+                        list_Decrypt.append(Decrypt)
+                Plaintext = "".join(list_Decrypt)
+                with open("Decrypt_Maessage.txt" ,'w') as Text :
+                      Text.write(Plaintext)
         except IndexError as E:
             print("[+] Error  : ",E)                 
     def algorithm (self):
@@ -133,19 +143,20 @@ class RSA_algorithm:
            self.En_crypt_Message()
         if self.args.key:
            self.Gen_PP()   
-        if self.args.secret and self.args.file:
-           self.De_crypt_Meassage()
+        if self.args.secret and self.args.file\
+        and self.args.decrypt:
+           self.De_crypt_Message()
+
     def Useage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument("-M",'--message'   , metavar=''          ,help   = " path of Massage to Encrypit")
-        parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Massage")
-        parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Massage")
-        parser.add_argument("-H",'--hex'       , action="store_true" ,help   = "output Massage Encrypt Hex Format")
-        parser.add_argument("-S",'--secret'    , metavar=''          ,help   = "output Massage Encrypt Hex Format")
-        parser.add_argument("-B",'--base64'    , action="store_true" ,help   = "output Massage Encrypt Base64 Format")
+        parser.add_argument("-M",'--message'   , metavar=''          ,help   = " path of Message to Encrypit")
+        parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Message")
+        parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Message")
+        parser.add_argument("-H",'--hex'       , action="store_true" ,help   = "output Message Encrypt Hex Format")
+        parser.add_argument("-S",'--secret'    , metavar=''          ,help   = "add private key To Decrypt Cihper Text")
+        parser.add_argument("-B",'--base64'    , action="store_true" ,help   = "output Message Encrypt Base64 Format")
         parser.add_argument("-K",'--key'       , action="store_true" ,help   = "Genreagte Key public-key , Praivate-Key")
-        parser.add_argument("-F",'--file'      ,metavar=''           ,help   = "Genreagte Key public-key , Praivate-Key")
-        parser.add_argument("-L",'--len'       , action="store_true" ,help   = "length of the Key Genreagte")
+        parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " EnCrypited Cihper Text file To Decrypt ")
         self.args = parser.parse_args() 
         if len(sys.argv)!=1 :
             pass
