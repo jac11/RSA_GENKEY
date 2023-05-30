@@ -9,9 +9,20 @@ import math
 import base64
 import argparse
 import sys
+import os
 
 list_Str = []
 VKEY = []
+if os.path.exists("./Decrypt_Data/") :
+    pass
+else:
+    os.mkdir("./Decrypt_Data/")  
+path = str(os.getcwd()+"/Decrypt_Data/")
+with open(".path",'w',) as pathf:
+     pathf.write(path)
+with open('.path','r') as pathf:
+     path = pathf.read()
+
 list =[
         1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051,
         1061, 1063, 1069, 1087, 1091, 1093, 1097, 1103, 1109,
@@ -33,11 +44,16 @@ class RSA_algorithm:
     def __init__(self):
         self.Useage()
         self.algorithm()
-    def ReadMessage(self):   
+    def ReadMessage(self): 
         try:
+            
             with open (self.args.message,'r') as readM:
-                Mas_txt = readM.read()
-            for L in Mas_txt :
+                Mes_txt = readM.read()
+            if os.path.exists(path+self.args.message.split("/")[-1]) :
+               pass
+            else:  
+                 os.mkdir(path+self.args.message.split("/")[-1])  
+            for L in Mes_txt :
                Num_str =list_Str.append(ord(L))
         except Exception as E :
             print("[+] Error  : " , E)  
@@ -46,7 +62,8 @@ class RSA_algorithm:
         for V in range(0,10):
             add = str(random.random())
             SValue = str(random.random())+"-"
-            Value = str(SValue[12:].join(str(add[1:6]))).replace("0.",'').replace('\n','')
+            Value = str(SValue[12:].join(str(add[1:6])))\
+            .replace("0.",'').replace('\n','')
             VKEY.append(Value)
         p_Num = random.choice(list)
         q_Num = random.choice(list)
@@ -69,46 +86,64 @@ class RSA_algorithm:
                    private_key +=1
                 else:    
                    break
-        Value1 = str(Public_key)+"-"+str(VKEY).replace("[",'').replace("]",'').replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
+        Value1 = str(Public_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
+        .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
         Value1 = str(base64.b64encode(bytes(Value1, 'utf-8')))
-        Value1 = "".join('\n%s'%Value1[i:i+56] for i in range(0, len(Value1),56)).replace("\n",'',1).replace("b'",'').replace("'",'')
-        Value2 = str(private_key)+"-"+str(VKEY).replace("[",'').replace("]",'').replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
+        Value1 = "".join('\n%s'%Value1[i:i+56] for i in range(0, len(Value1),56))\
+        .replace("\n",'',1).replace("b'",'').replace("'",'')
+        Value2 = str(private_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
+        .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
         Value2 = str(base64.b64encode(bytes(Value2, 'utf-8')))     
-        Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56)).replace("\n",'',1).replace("b'",'').replace("'",'')
+        Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56))\
+        .replace("\n",'',1).replace("b'",'').replace("'",'')
         Style = "#"+"-"*20+"#"
         if self.args.key or self.args.message:
-            with open("./Public-key.pem" ,'w') as Publickey:
+            pbkey = path+self.args.message.split("/")[-1]+"/"+str(self.args.output)
+            with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                 Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
                 '\n'+Style+"END RSA PUBLIC KEY"+Style)  
-            with open("./Praivate-Key.pem" ,'w') as PraivateKey:
+            with open(pbkey+"-Praivate-Key.pem" ,'w') as PraivateKey:
                 PraivateKey.write(Style+"BEGIN RSA PRIVATE KEY"+Style+"\n"+Value2+\
-                '\n'+Style+"END RSA PRIVATE KEY"+Style)                           
+                '\n'+Style+"END RSA PRIVATE KEY"+Style)                              
         self.N_Num       = N_Num 
         self.private_key = private_key
-        self.Public_key = Public_key                  
-    def En_crypt_Message(self):                    
+        self.Public_key = Public_key   
+        with open(".path",'w')as newpath:
+            newpath.write(str("/".join(pbkey.split("/")[:-1])))      
+        with open(".path2",'w') as path2:
+             path2.write(pbkey)           
+    def En_crypt_Message(self):   
+        with open(".path",'r') as readnewpath:
+             path = readnewpath.read()                      
         list_Encrypt = []
         for Mas in list_Str :
             Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
             list_Encrypt.append(Ciphertext)
         if self.args.base64 and self.args.enctypt :   
-            Encrypt = str("".join(str(list_Encrypt))).replace("[",'').replace(',','').replace("]",'')   
-            E_base64 = str(base64.b64encode(bytes(Encrypt, 'utf-8'))).replace("b'",'').replace("'",'')
-            with open("Encrypt64.txt",'w') as DecryptW:
+            Encrypt = str("".join(str(list_Encrypt))).replace("[",'')\
+            .replace(',','').replace("]",'')   
+            E_base64 = str(base64.b64encode(bytes(Encrypt, 'utf-8')))\
+            .replace("b'",'').replace("'",'')
+            with open(path+"/EncryptB64-"+str(path.split("/")[-1]) ,'w') as DecryptW:
                 DecryptW.write(E_base64)
         if  self.args.hex and self.args.enctypt :
-            with open ("EncryptHEX.txt",'w') as HEXData :
+            with open (path+"/EncryptHEX-"+str(path.split("/")[-1]),'w') as HEXData :
                 for Hex in list_Encrypt :
                     Hex  = hex(Hex)
-                    with open ("EncryptHEX.txt",'a') as HEXData :
+                    with open (path+"/EncryptHEX-"+str(path.split("/")[-1]) ,'a') as HEXData :
                        HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
     def De_crypt_Message(self):
+        with open('.path','r') as path :
+            path = path.read()
+        with open('.path2','r') as path2:
+             path2 = path2.read()    
         list_Decrypt = []
         try : 
-            with open ("Praivate-Key.pem",'r') as R_secret :            
+            with open (path2+"-Praivate-Key.pem",'r') as R_secret :            
                 secret_F = R_secret.read().replace("\n","").split("#")
             secret = str("".join(secret_F[4:-4]))
-            secret_F = str(base64.b64decode(bytes(secret,'utf-8'))).replace(" ",'').replace("b'",'').replace("'",'').split("-")
+            secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+            .replace(" ",'').replace("b'",'').replace("'",'').split("-")
             Key = secret_F
             privateK = int(Key[0])
             NKey= int(Key[-1][1:])
@@ -121,7 +156,7 @@ class RSA_algorithm:
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt)
                 Plaintext = "".join(list_Decrypt)
-                with open("Decrypt_Maessage.txt" ,'w') as Text :
+                with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptB64_"+str("".join(path2.split("/")[-2])),'w') as Text :
                       Text.write(Plaintext)
             if self.args.hex:
                 with open(self.args.file,'r') as Ciphertext_R :
@@ -132,21 +167,23 @@ class RSA_algorithm:
                         Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
                         list_Decrypt.append(Decrypt)
                 Plaintext = "".join(list_Decrypt)
-                with open("Decrypt_Maessage.txt" ,'w') as Text :
+                with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptHEX_"+str("".join(path2.split("/")[-2])),'w')as Text :
                       Text.write(Plaintext)
         except IndexError as E:
             print("[+] Error  : ",E)                 
     def algorithm (self):
-        if self.args.message :
+        if self.args.message and self.args.output:
            self.ReadMessage()
            self.Gen_PP()
            self.En_crypt_Message()
-        if self.args.key:
+        elif self.args.key and self.args.output:
            self.Gen_PP()   
-        if self.args.secret and self.args.file\
-        and self.args.decrypt:
+        elif self.args.secret and self.args.file\
+        and self.args.decrypt\
+        and (self.args.base64 or self.args.hex):
            self.De_crypt_Message()
-
+        else:
+            print("[*] NO OPtion...& ")
     def Useage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-M",'--message'   , metavar=''          ,help   = " path of Message to Encrypit")
@@ -157,6 +194,7 @@ class RSA_algorithm:
         parser.add_argument("-B",'--base64'    , action="store_true" ,help   = "output Message Encrypt Base64 Format")
         parser.add_argument("-K",'--key'       , action="store_true" ,help   = "Genreagte Key public-key , Praivate-Key")
         parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " EnCrypited Cihper Text file To Decrypt ")
+        parser.add_argument("-O",'--output'    ,metavar=''           ,help   = " output key Name")
         self.args = parser.parse_args() 
         if len(sys.argv)!=1 :
             pass
