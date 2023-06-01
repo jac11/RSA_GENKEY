@@ -11,6 +11,15 @@ import argparse
 import sys
 import os
 import time
+import string
+print("""                                                      
+ 
+   ╦═╗╔═╗╔═╗   ╔═╗╔═╗╔╗╔╦╔═╔═╗╦ ╦🔐
+   ╠╦╝╚═╗╠═╣───║ ╦║╣ ║║║╠╩╗║╣ ╚╦╝
+   ╩╚═╚═╝╩ ╩   ╚═╝╚═╝╝╚╝╩ ╩╚═╝ ╩ 
+               @jacstory🗝️
+"""
+)
 list_Str = []
 VKEY = []
 if os.path.exists("./Decrypt_Data/") :
@@ -40,6 +49,8 @@ list =[
         1871, 1873, 1877, 1879, 1889, 1901, 1907, 1913, 1931,
         1933, 1949, 1951, 1973, 1979, 1987, 1993, 1997, 1999
      ]
+from Crypto.Util import number
+    
 class RSA_algorithm:
     def __init__(self):
         self.Usage()
@@ -55,9 +66,9 @@ class RSA_algorithm:
             for L in Mes_txt :
                Num_str =list_Str.append(ord(L))
             time.sleep(.15)   
-            print("[+] Message       ::------------:: ", str("".join(self.args.message.split("/")[-1])))   
+            print("✉️   Message        ::------------:: ", str("".join(self.args.message.split("/")[-1]))+"       ✔️")   
         except Exception as E :
-            print("[+] Error  ::------------:: " , E)  
+            print(" 🚨️🚧️ Error  ::------------:: " , E)  
             exit() 
     def Gen_PP(self): 
         try : 
@@ -111,17 +122,17 @@ class RSA_algorithm:
             self.private_key = private_key
             self.Public_key  = Public_key   
             time.sleep(.15) 
-            print("[+] P-Value       ::------------:: **********")
+            print("🛟️  P-Value        ::------------:: **********     ✔️")
             time.sleep(.15) 
-            print("[+] Q-Value       ::------------:: **********")
+            print("💡️  Q-Value        ::------------:: **********     ✔️")
             time.sleep(.15) 
-            print("[+] P*Q-Value     ::------------:: **********")
+            print("📌️  P*Q-Value      ::------------:: **********     ✔️ ")
             time.sleep(.15) 
-            print("[+] Euler-Totient ::------------:: **********")
+            print("🎯  Euler-Totient  ::------------:: **********     ✔️")
             time.sleep(.15) 
-            print("[+] Public_key    ::------------:: Genreagted")
+            print("🔑  Public_key     ::------------:: Genreagted 🗝️   ✔️")
             time.sleep(.15) 
-            print("[+] Private_key   ::------------:: Genreagted")
+            print("🔑  Private_key    ::------------:: Genreagted 🗝️   ✔️")
             time.sleep(.15) 
             print("="*40)
             with open(".path",'w')as newpath:
@@ -129,18 +140,22 @@ class RSA_algorithm:
             with open(".path2",'w') as path2:
                 path2.write(pbkey)
         except Exception as E:
-            print("[+] Error  : ::------------::",E)  
+            print("🚨️🚧️  Error  : ::------------::",E)  
         except KeyboardInterrupt :
-            print("[+] Error ::------------: KeyboardInterrupt")    
+            print("🚨️🚧️  Error ::------------: KeyboardInterrupt")    
             exit()                          
     def En_crypt_Message(self): 
         try:  
+            print("🔐 Encrypt-Info 🔐 : "+'\n'+"="*20)
             with open(".path",'r') as readnewpath:
                 path = readnewpath.read()                      
             list_Encrypt = []
             for Mas in list_Str :
                 Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
                 list_Encrypt.append(Ciphertext)
+                print("⏳ Ciphertext   ::------------:: ",str(random.random())[2:])
+                sys.stdout.write('\x1b[1A')
+                sys.stdout.write('\x1b[2K')
             if self.args.base64 and self.args.enctypt :   
                 Encrypt = str("".join(str(list_Encrypt))).replace("[",'')\
                 .replace(',','').replace("]",'')   
@@ -154,24 +169,24 @@ class RSA_algorithm:
                         Hex  = hex(Hex)
                         with open (path+"/EncryptHEX-"+str(path.split("/")[-1]) ,'a') as HEXData :
                             HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
-            print("##Encrypt-Info : "+'\n'+"="*20)
+           
             time.sleep(.15) 
-            print("[+] Plain-text          ::------------:: ", str("".join(self.args.message.split("/")[-1])))
+            print("✍️   Plain-text           ::------------:: ", str("".join(self.args.message.split("/")[-1])))
             time.sleep(.15)
             if  self.args.base64 : 
-                print("[+] Ciphertext          ::------------:: Format Base64 ")
+                print("🛡️   Ciphertext           ::------------::  Format Base64 ")
                 time.sleep(.15)
-                print("[+] Encrypted message   ::------------:: " ,"EncryptB64-"+str(path.split("/")[-1]) )
+                print("🔐  Encrypted message    ::------------:: " ,"EncryptB64-"+str(path.split("/")[-1]) )
             else:
-                print("[+] Ciphertext    ::------------:: Format Hex String ")
+                print("🛡️   Ciphertext           ::------------::  Format Hex String ")
                 time.sleep(.15) 
-                print("[+] Encrypted message  ::------------:: " ,"EncryptHEX-"+str(path.split("/")[-1]) )
+                print("🔐  Encrypted message    ::------------:: " ,"EncryptHEX-"+str(path.split("/")[-1]) )
             time.sleep(.15) 
-            print("[+] Encrypted Process   ::------------:: Done ")               
+            print("💯  Encrypted Process    ::------------::  Done ")               
         except Exception as E:
-            print("[+] Error  ::------------:: ",E)  
+            print("🚨️🚧️  Error  ::------------:: ",E)  
         except KeyboardInterrupt :
-            print("[+] Error ::------------:: KeyboardInterrupt")    
+            print("🚨️🚧️  Error ::------------:: KeyboardInterrupt")    
             exit()                            
     def De_crypt_Message(self):
         with open('.path','r') as path :
@@ -222,9 +237,9 @@ class RSA_algorithm:
             time.sleep(.15) 
             print("[+] ")          
         except Exception as E:
-            print("[+] Error  ::------------:: ",E)  
+            print("🚨️🚧️  Error  ::------------:: ",E)  
         except KeyboardInterrupt :
-            print("[+] Error ::------------:: KeyboardInterrupt")    
+            print("🚨️🚧️  Error ::------------:: KeyboardInterrupt")    
             exit()                   
     def algorithm (self):
         if self.args.message and self.args.output:
