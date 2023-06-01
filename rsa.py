@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/en#!/usr/bin/env python
 #d = (e^-1) mod phi(n)
 #C = (M^e) mod n = 31^7 mod 33 = 4
 #: M = (C^d) mod n = 4^3 mod 33 = 31
@@ -13,10 +13,9 @@ import os
 import time
 import string
 print("""                                                      
- 
-   ╦═╗╔═╗╔═╗   ╔═╗╔═╗╔╗╔╦╔═╔═╗╦ ╦🔐
+   ╦═╗╔═╗╔═╗   ╔═╗╔═╗╔╗╔╦╔═╔═╗╦ ╦ 🔐
    ╠╦╝╚═╗╠═╣───║ ╦║╣ ║║║╠╩╗║╣ ╚╦╝
-   ╩╚═╚═╝╩ ╩   ╚═╝╚═╝╝╚╝╩ ╩╚═╝ ╩ 
+   ╩╚═╚═╝╩ ╩   ╚═╝╚═╝╝╚╝╩ ╩╚═╝ ╩ 🎲️
                @jacstory🗝️
 """
 )
@@ -66,7 +65,7 @@ class RSA_algorithm:
             for L in Mes_txt :
                Num_str =list_Str.append(ord(L))
             time.sleep(.15)   
-            print("✉️   Message        ::------------:: ", str("".join(self.args.message.split("/")[-1]))+"       ✔️")   
+            print("✉️   Message        ::------------:: ", str("".join(self.args.message.split("/")[-1])))   
         except Exception as E :
             print(" 🚨️🚧️ Error  ::------------:: " , E)  
             exit() 
@@ -89,7 +88,7 @@ class RSA_algorithm:
                 if 1 < Public_key < QT_Num:
                     if math.gcd( QT_Num , Public_key ) == 1:
                         if Public_key == p_Num :
-           	                continue
+                            continue
                         else:
                             Public_key_list.append(Public_key)
             Public_key = random.choice(Public_key_list)
@@ -187,8 +186,9 @@ class RSA_algorithm:
             print("🚨️🚧️  Error  ::------------:: ",E)  
         except KeyboardInterrupt :
             print("🚨️🚧️  Error ::------------:: KeyboardInterrupt")    
-            exit()                            
+            exit()                               
     def De_crypt_Message(self):
+        print("🎲️ Decryption-Info 🎲️ : "+'\n'+"="*20)
         with open('.path','r') as path :
             path = path.read()
         with open('.path2','r') as path2:
@@ -196,22 +196,25 @@ class RSA_algorithm:
         list_Decrypt = []
         try : 
             with open (path2+"-Praivate-Key.pem",'r') as R_secret :            
-                secret_F = R_secret.read().replace("\n","").split("#")
+                secret_F = R_secret.read().replace("\n","",2).split("#")
             secret = str("".join(secret_F[4:-4]))
             secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
             .replace(" ",'').replace("b'",'').replace("'",'').split("-")
             Key = secret_F
             privateK = int(Key[0])
-            NKey= int(Key[-1][1:])
+            NKey= int(Key[-1][1:])   
             if self.args.base64 :
                 with open(self.args.file,'r') as Ciphertext_R :
                      DeCipher = Ciphertext_R.read()     
                 D_baes64 = base64.b64decode(DeCipher).decode("utf-8").split(" ")
                 for Char in D_baes64 :
-                    Char = int(Char)
+                    print("⏳ Decryption   ::------------:: ",str(random.random())[2:])  
+                    sys.stdout.write('\x1b[1A')
+                    sys.stdout.write('\x1b[2K')  
+                    Char = int(Char)   
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
-                    list_Decrypt.append(Decrypt)        
-                Plaintext = "".join(list_Decrypt)
+                    list_Decrypt.append(Decrypt) 
+                Plaintext = "".join(list_Decrypt)            
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptB64_"+\
                     str("".join(path2.split("/")[-2])),'w') as Text :
                       Text.write(Plaintext)
@@ -227,17 +230,20 @@ class RSA_algorithm:
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptHEX_"+\
                     str("".join(path2.split("/")[-2])),'w')as Text :
                       Text.write(Plaintext)
-            print("[+] ")
             time.sleep(.15) 
-            print("[+] ")
-            time.sleep(.15) 
-            print("[+] ")
-            time.sleep(.15) 
-            print("[+] ")
-            time.sleep(.15) 
-            print("[+] ")          
-        except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ",E)  
+            print("🖨️   Eecryption-message    ::------------::  " +str(self.args.file.split("/")[-1]) )
+            if self.args.base64 :
+                time.sleep(.15) 
+                print("📃️  Decrypted-message     ::------------::  DecryptB64-"+str(path2.split("/")[-2]))
+            if self.args.hex:
+                time.sleep(.15) 
+                print("📃️ Decrypted-message    ::------------:: DecryptHEX-"+str(path2.split("/")[-2]))  
+            time     
+            print("💯  Decryption Process    ::------------::  Done ")   
+            time.sleep(.15)
+            print("💾  location              ::------------::  file://"+path+str(path2.split("/")[-2]))  
+       # except Exception as E:
+        #    print("🚨️🚧️  Error  ::------------:: ",E)  
         except KeyboardInterrupt :
             print("🚨️🚧️  Error ::------------:: KeyboardInterrupt")    
             exit()                   
@@ -273,6 +279,6 @@ class RSA_algorithm:
             pass
         else:
             parser.print_help()         
-            exit()   	 
+            exit()       
 if  __name__ == '__main__':
     RSA_algorithm()
