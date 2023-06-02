@@ -121,17 +121,17 @@ class RSA_algorithm:
             self.private_key = private_key
             self.Public_key  = Public_key   
             time.sleep(.15) 
-            print("🛟️  P-Value        ::------------:: **********     ✔️")
+            print("🛟️  P-Value        ::------------::  **********     ✔️")
             time.sleep(.15) 
-            print("💡️  Q-Value        ::------------:: **********     ✔️")
+            print("💡️  Q-Value        ::------------::  **********     ✔️")
             time.sleep(.15) 
-            print("📌️  P*Q-Value      ::------------:: **********     ✔️ ")
+            print("📌️  P*Q-Value      ::------------::  **********     ✔️ ")
             time.sleep(.15) 
-            print("🎯  Euler-Totient  ::------------:: **********     ✔️")
+            print("🎯  Euler-Totient  ::------------::  **********     ✔️")
             time.sleep(.15) 
-            print("🔑  Public_key     ::------------:: Genreagted 🗝️   ✔️")
+            print("🔑  Public_key     ::------------::  Genreagted 🗝️   ✔️")
             time.sleep(.15) 
-            print("🔑  Private_key    ::------------:: Genreagted 🗝️   ✔️")
+            print("🔑  Private_key    ::------------::  Genreagted 🗝️   ✔️")
             time.sleep(.15) 
             print("="*40)
             with open(".path",'w')as newpath:
@@ -181,7 +181,9 @@ class RSA_algorithm:
                 time.sleep(.15) 
                 print("🔐  Encrypted message    ::------------:: " ,"EncryptHEX-"+str(path.split("/")[-1]) )
             time.sleep(.15) 
-            print("💯  Encrypted Process    ::------------::  Done ")               
+            print("💯  Encrypted Process    ::------------::  Done ")   
+            time.sleep(.15)
+            print("💾  location             ::------------::  file://"+path)            
         except Exception as E:
             print("🚨️🚧️  Error  ::------------:: ",E)  
         except KeyboardInterrupt :
@@ -194,6 +196,7 @@ class RSA_algorithm:
         with open('.path2','r') as path2:
              path2 = path2.read()    
         list_Decrypt = []
+       
         try : 
             with open (path2+"-Praivate-Key.pem",'r') as R_secret :            
                 secret_F = R_secret.read().replace("\n","",2).split("#")
@@ -207,10 +210,10 @@ class RSA_algorithm:
                 with open(self.args.file,'r') as Ciphertext_R :
                      DeCipher = Ciphertext_R.read()     
                 D_baes64 = base64.b64decode(DeCipher).decode("utf-8").split(" ")
-                for Char in D_baes64 :
-                    print("⏳ Decryption   ::------------:: ",str(random.random())[2:])  
+                for Char in D_baes64 :  
+                    print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
                     sys.stdout.write('\x1b[1A')
-                    sys.stdout.write('\x1b[2K')  
+                    sys.stdout.write('\x1b[2K') 
                     Char = int(Char)   
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt) 
@@ -223,6 +226,9 @@ class RSA_algorithm:
                     DeCipher = Ciphertext_R.read().split(" ")
                     DeCipher  = DeCipher[1:]
                     for HEX in DeCipher :
+                        print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K') 
                         HEXTONUM = int(HEX,16)
                         Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
                         list_Decrypt.append(Decrypt)
@@ -231,13 +237,13 @@ class RSA_algorithm:
                     str("".join(path2.split("/")[-2])),'w')as Text :
                       Text.write(Plaintext)
             time.sleep(.15) 
-            print("🖨️   Eecryption-message    ::------------::  " +str(self.args.file.split("/")[-1]) )
+            print("🔐  Eecryption-message    ::------------::  " +str(self.args.file.split("/")[-1]) )
             if self.args.base64 :
                 time.sleep(.15) 
-                print("📃️  Decrypted-message     ::------------::  DecryptB64-"+str(path2.split("/")[-2]))
+                print("🖨️   Decrypted-message     ::------------::  DecryptB64-"+str(path2.split("/")[-2]))
             if self.args.hex:
                 time.sleep(.15) 
-                print("📃️ Decrypted-message    ::------------:: DecryptHEX-"+str(path2.split("/")[-2]))  
+                print("🖨️   Decrypted-message     ::------------::  DecryptHEX-"+str(path2.split("/")[-2]))  
             time     
             print("💯  Decryption Process    ::------------::  Done ")   
             time.sleep(.15)
