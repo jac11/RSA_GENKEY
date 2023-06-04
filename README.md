@@ -1,5 +1,5 @@
 # RSA_GENKEY
-## RSA algorithm tool "starting point"
+## RSA algorithm {Decrypt-Encrypt}
 ```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]
 
 Usage: [OPtion] [arguments] [ -w ] [arguments]
