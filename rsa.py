@@ -1,4 +1,4 @@
-#!/usr/bin/en#!/usr/bin/env python
+#!/usr/bin/env python
 #d = (e^-1) mod phi(n)
 #C = (M^e) mod n = 31^7 mod 33 = 4
 #: M = (C^d) mod n = 4^3 mod 33 = 31
