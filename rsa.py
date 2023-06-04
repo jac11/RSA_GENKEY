@@ -168,8 +168,8 @@ class RSA_algorithm:
                 newpath.write(str("/".join(pbkey.split("/")[:-1])))      
             with open(".path2",'w') as path2:
                 path2.write(pbkey)
-        #except Exception as E:
-         #   print("🚨️🚧️  Error  : ::------------::",E)  
+        except Exception as E:
+            print("🚨️🚧️  Error  : ::------------::",E)  
         except KeyboardInterrupt :
             print("🚨️🚧️  Error ::------------: KeyboardInterrupt")    
             exit()                          
