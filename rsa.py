@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 #d = (e^-1) mod phi(n)
 #C = (M^e) mod n = 31^7 mod 33 = 4
 #: M = (C^d) mod n = 4^3 mod 33 = 31
@@ -57,6 +58,7 @@ class RSA_algorithm:
         try:
             with open (self.args.message,'r') as readM:
                 Mes_txt = readM.read()
+                self.Len = len(Mes_txt)
             if os.path.exists(path+self.args.message.split("/")[-1]) :
                pass
             else:  
@@ -64,10 +66,12 @@ class RSA_algorithm:
            
             for L in Mes_txt :
                Num_str =list_Str.append(ord(L))
+            self.Len = len(list_Str)
             time.sleep(.15)   
             print("✉️   Message        ::------------:: ", str("".join(self.args.message.split("/")[-1])))   
+            print("🧶️  length         ::------------:: ", str(self.Len)) 
         except Exception as E :
-            print(" 🚨️🚧️ Error  ::------------:: " , E)  
+            print("🚨️🚧️ Error  ::------------:: ".strip() , E)  
             exit() 
     def Gen_PP(self): 
         try : 
@@ -125,7 +129,6 @@ class RSA_algorithm:
                        pass
                 else:   
                     os.mkdir(path+self.args.output+"-KEY"+"/")   
-                    print(1)
                 pbkey = path+self.args.output+"-KEY"+"/"+self.args.output
                 with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                     Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
@@ -169,22 +172,37 @@ class RSA_algorithm:
             with open(".path2",'w') as path2:
                 path2.write(pbkey)
         except Exception as E:
-            print("🚨️🚧️  Error  : ::------------::",E)  
+            print("🚨️🚧️  Error  : ::------------::".strip(),E)  
         except KeyboardInterrupt :
-            print("🚨️🚧️  Error ::------------: KeyboardInterrupt")    
+            print("🚨️🚧️  Error ::------------: KeyboardInterrupt".strip())    
             exit()                          
     def En_crypt_Message(self): 
-        try:  
+        try: 
             print("🔐 Encrypt-Info 🔐 : "+'\n'+"="*20)
             with open(".path",'r') as readnewpath:
                 path = readnewpath.read()                      
             list_Encrypt = []
+            count = 0
+            count2 = 0
+            f = '-'
+            L =len(list_Str) 
+            if L > 100 :
+                L =100
             for Mas in list_Str :
+                count +=1             
+                total = (count / int(len(list_Str))) * 100
                 Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
                 list_Encrypt.append(Ciphertext)
+                D = '['+f*L+']'
+                go = str(int(total))+D.replace(f,'#'*count2,1)
                 print("⏳ Ciphertext   ::------------:: ",str(random.random())[2:])
+                print("⚙️  Processed    ::------------:: %",f"{go:<120}")
                 sys.stdout.write('\x1b[1A')
                 sys.stdout.write('\x1b[2K')
+                sys.stdout.write('\x1b[1A')
+                sys.stdout.write('\x1b[2K')
+                count2 +=1
+                L -=1
             if self.args.base64 and self.args.enctypt :   
                 Encrypt = str("".join(str(list_Encrypt))).replace("[",'')\
                 .replace(',','').replace("]",'')   
@@ -215,9 +233,9 @@ class RSA_algorithm:
             time.sleep(.15)
             print("💾  location             ::------------::  file://"+path)            
         except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ",E)  
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E)
         except KeyboardInterrupt :
-            print("🚨️🚧️  Error ::------------:: KeyboardInterrupt")    
+            print("🚨️🚧️  Error ::------------:: KeyboardInterrupt".strip())    
             exit()                               
     def De_crypt_Message(self):
         print("🎲️ Decryption-Info 🎲️ : "+'\n'+"="*20)
@@ -240,28 +258,60 @@ class RSA_algorithm:
                 with open(self.args.file,'r') as Ciphertext_R :
                      DeCipher = Ciphertext_R.read()     
                 D_baes64 = base64.b64decode(DeCipher).decode("utf-8").split(" ")
-                for Char in D_baes64 :  
+                count = 0
+                count2 = 0
+                f = '-'
+                L = len(D_baes64)
+                if L > 100:
+                   L = 100
+                for Char in D_baes64 : 
+                    count +=1 
+                    total = (count / int(len(D_baes64))) * 100
+                    D = '['+f*L+']'
+                    go = str(int(total))+D.replace(f,'#'*count2,1)
                     print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
+                    print("⚙️  Processed    ::------------:: %",f"{go:<120}")
                     sys.stdout.write('\x1b[1A')
-                    sys.stdout.write('\x1b[2K') 
+                    sys.stdout.write('\x1b[2K')
+                    sys.stdout.write('\x1b[1A')
+                    sys.stdout.write('\x1b[2K')
                     Char = int(Char)   
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt) 
+                    count2 +=1         
+                    L -=1  
                 Plaintext = "".join(list_Decrypt)            
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptB64_"+\
                     str("".join(path2.split("/")[-2])),'w') as Text :
                       Text.write(Plaintext)
             if self.args.hex:
+                
                 with open(self.args.file,'r') as Ciphertext_R :
                     DeCipher = Ciphertext_R.read().split(" ")
                     DeCipher  = DeCipher[1:]
+                    count = 0
+                    count2 = 0
+                    f = '-'
+                    L = len(DeCipher)
+                    if L > 100:
+                        L = 100
                     for HEX in DeCipher :
+                        count +=1 
+                        total = (count / int(len(DeCipher))) * 100
+                        D = '['+f*L+']'
+                        go = str(int(total))+D.replace(f,'#'*count2,1)
                         print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
+                        print("⚙️  Processed    ::------------:: %",f"{go:<120}")
                         sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K') 
+                        sys.stdout.write('\x1b[2K')
+                        sys.stdout.write('\x1b[1A')
+                        sys.stdout.write('\x1b[2K')
+                                   
                         HEXTONUM = int(HEX,16)
                         Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
                         list_Decrypt.append(Decrypt)
+                        count2 +=1         
+                        L -=1  
                 Plaintext = "".join(list_Decrypt)
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptHEX_"+\
                     str("".join(path2.split("/")[-2])),'w')as Text :
@@ -274,14 +324,14 @@ class RSA_algorithm:
             if self.args.hex:
                 time.sleep(.15) 
                 print("🖨️   Decrypted-message     ::------------::  DecryptHEX-"+str(path2.split("/")[-2]))  
-            time     
+            time.sleep(.15)    
             print("💯  Decryption Process    ::------------::  Done ")   
             time.sleep(.15)
             print("💾  location              ::------------::  file://"+path+str(path2.split("/")[-2]))  
         except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ",E)  
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
-            print("🚨️🚧️  Error ::------------:: KeyboardInterrupt")    
+            print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()                   
     def algorithm (self):
         if self.args.message and self.args.output:
@@ -301,20 +351,20 @@ class RSA_algorithm:
                 )
     def Usage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
-        parser.add_argument("-M",'--message'   , metavar=''          ,help   = " path of Message to Encrypit")
-        parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Message")
-        parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Message")
-        parser.add_argument("-H",'--hex'       , action="store_true" ,help   = "output Message Encrypt Hex Format")
-        parser.add_argument("-S",'--secret'    , metavar=''          ,help   = "add private key To Decrypt Cihper Text")
-        parser.add_argument("-B",'--base64'    , action="store_true" ,help   = "output Message Encrypt Base64 Format")
-        parser.add_argument("-K",'--key'       , action="store_true" ,help   = "Genreagte Key public-key , Private-Key")
-        parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " EnCrypited Cihper Text file To Decrypt ")
-        parser.add_argument("-O",'--output'    ,metavar=''           ,help   = " output key Name")
+        parser.add_argument("-M",'--message'   , metavar=''          ,help   = " Path of  Plaintext message to Decrypt ")
+        parser.add_argument("-D",'--decrypt'   , action="store_true" ,help   = " Decrypt Mode")
+        parser.add_argument("-E",'--enctypt'   , action="store_true" ,help   = " Enctypt Mode")
+        parser.add_argument("-H",'--hex'       , action="store_true" ,help   = " Output Message Encrypt Hex Format")
+        parser.add_argument("-S",'--secret'    , metavar=''          ,help   = " Private key To Decrypt Cihper Text")
+        parser.add_argument("-B",'--base64'    , action="store_true" ,help   = " Output Message Encrypt Base64 Format")
+        parser.add_argument("-K",'--key'       , action="store_true" ,help   = " Genreagte Key public-key , Private-Key")
+        parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " Encrypt Cihper Text file To Decrypt ")
+        parser.add_argument("-O",'--output'    ,metavar=''           ,help   = " Output key Name")
         self.args = parser.parse_args() 
         if len(sys.argv)!=1 :
             pass
         else:
-            parser.print_help()         
+            parser.print_help()
             exit()       
 if  __name__ == '__main__':
     RSA_algorithm()
