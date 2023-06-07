@@ -116,7 +116,7 @@ class RSA_algorithm:
 
             if self.args.message:
 
-                pbkey = path+self.args.message.split("/")[-1]+"/"+str(self.args.output)
+                pbkey = path+self.args.message.split("/")[-1]+"/"+self.args.message.split("/")[-1]    #str(self.args.key)
                 with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                     Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
                     '\n'+Style+"END RSA PUBLIC KEY"+Style)  
@@ -125,11 +125,11 @@ class RSA_algorithm:
                     '\n'+Style+"END RSA PRIVATE KEY"+Style) 
 
             if self.args.key  and not self.args.message :
-                if os.path.exists(path+self.args.output+"-KEY"+"/") :
+                if os.path.exists(path+self.args.key+"-KEY"+"/") :
                        pass
                 else:   
-                    os.mkdir(path+self.args.output+"-KEY"+"/")   
-                pbkey = path+self.args.output+"-KEY"+"/"+self.args.output
+                    os.mkdir(path+self.args.key+"-KEY"+"/")   
+                pbkey = path+self.args.key+"-KEY"+"/"+self.args.key
                 with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                     Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
                     '\n'+Style+"END RSA PUBLIC KEY"+Style)  
@@ -156,12 +156,12 @@ class RSA_algorithm:
             time.sleep(.15) 
             print("="*40)
 
-            if (self.args.key  and self.args.output ) and not (self.args.message\
+            if  self.args.key   and not (self.args.message\
             and self.args.decrypt and not self.args.enctypt) :
                 print("🔑  Keys-Info 🔑  : "+'\n'+"="*20)
-                print("🗝️   Public_key     ::------------:: ",self.args.output+"-Public-key.pem")
+                print("🗝️   Public_key     ::------------:: ",self.args.key+"-Public-key.pem")
                 time.sleep(.15) 
-                print("🔑  Private_key    ::------------:: ",self.args.output+"-Private-key.pem")
+                print("🔑  Private_key    ::------------:: ",self.args.key+"-Private-key.pem")
                 time.sleep(.15) 
                 print("💾  location       ::------------::  file://"+str("/".join(pbkey.split("/")[0:-1])))
                 exit()
@@ -194,7 +194,10 @@ class RSA_algorithm:
                 Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
                 list_Encrypt.append(Ciphertext)
                 D = '['+f*L+']'
-                go = str(int(total))+D.replace(f,'#'*count2,1)
+                if len(list_Str) <= 20 :
+                    go = str(int(total))
+                else:    
+                    go = str(int(total))+D.replace(f,'#'*count2,1)
                 print("⏳ Ciphertext   ::------------:: ",str(random.random())[2:])
                 print("⚙️  Processed    ::------------:: %",f"{go:<120}")
                 sys.stdout.write('\x1b[1A')
@@ -263,12 +266,15 @@ class RSA_algorithm:
                 f = '-'
                 L = len(D_baes64)
                 if L > 100:
-                   L = 100
+                   L = 100   
                 for Char in D_baes64 : 
                     count +=1 
                     total = (count / int(len(D_baes64))) * 100
                     D = '['+f*L+']'
-                    go = str(int(total))+D.replace(f,'#'*count2,1)
+                    if len(D_baes64) <= 20 :
+                       go = str(int(total))
+                    else:   
+                       go = str(int(total))+D.replace(f,'#'*count2,1)
                     print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
                     print("⚙️  Processed    ::------------:: %",f"{go:<120}")
                     sys.stdout.write('\x1b[1A')
@@ -278,7 +284,7 @@ class RSA_algorithm:
                     Char = int(Char)   
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt) 
-                    count2 +=1         
+                    count2 +=1        
                     L -=1  
                 Plaintext = "".join(list_Decrypt)            
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptB64_"+\
@@ -299,7 +305,10 @@ class RSA_algorithm:
                         count +=1 
                         total = (count / int(len(DeCipher))) * 100
                         D = '['+f*L+']'
-                        go = str(int(total))+D.replace(f,'#'*count2,1)
+                        if len(DeCipher) <= 20 :
+                            go = str(int(total))
+                        else:    
+                            go = str(int(total))+D.replace(f,'#'*count2,1)
                         print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
                         print("⚙️  Processed    ::------------:: %",f"{go:<120}")
                         sys.stdout.write('\x1b[1A')
@@ -334,11 +343,11 @@ class RSA_algorithm:
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()                   
     def algorithm (self):
-        if self.args.message and self.args.output:
+        if self.args.message :
            self.ReadMessage()
            self.Gen_PP()
            self.En_crypt_Message()
-        elif self.args.key and self.args.output and not self.args.message:
+        elif self.args.key and self.args.key and not self.args.message:
            self.Gen_PP()   
         elif self.args.secret and self.args.file\
         and self.args.decrypt\
@@ -357,9 +366,8 @@ class RSA_algorithm:
         parser.add_argument("-H",'--hex'       , action="store_true" ,help   = " Output Message Encrypt Hex Format")
         parser.add_argument("-S",'--secret'    , metavar=''          ,help   = " Private key To Decrypt Cihper Text")
         parser.add_argument("-B",'--base64'    , action="store_true" ,help   = " Output Message Encrypt Base64 Format")
-        parser.add_argument("-K",'--key'       , action="store_true" ,help   = " Genreagte Key public-key , Private-Key")
+        parser.add_argument("-K",'--key'       , metavar=''          ,help   = " Genreagte Key public-key , Private-Key")
         parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " Encrypt Cihper Text file To Decrypt ")
-        parser.add_argument("-O",'--output'    ,metavar=''           ,help   = " Output key Name")
         self.args = parser.parse_args() 
         if len(sys.argv)!=1 :
             pass
