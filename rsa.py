@@ -146,7 +146,7 @@ class RSA_algorithm:
             time.sleep(.15) 
             print("💡️  Q-Value        ::------------::  **********     ✔️")
             time.sleep(.15) 
-            print("📌️  P*Q-Value      ::------------::  **********     ✔️ ")
+            print("📌️  P*Q-Value      ::------------::  **********     ✔️")
             time.sleep(.15) 
             print("🎯  Euler-Totient  ::------------::  **********     ✔️")
             time.sleep(.15) 
@@ -177,10 +177,28 @@ class RSA_algorithm:
             print("🚨️🚧️  Error ::------------: KeyboardInterrupt".strip())    
             exit()                          
     def En_crypt_Message(self): 
+        with open(".path",'r') as readnewpath:
+            path = readnewpath.read()       
         try: 
-            print("🔐 Encrypt-Info 🔐 : "+'\n'+"="*20)
-            with open(".path",'r') as readnewpath:
-                path = readnewpath.read()                      
+            if self.args.public:
+               with open(self.args.public,'r') as Symmetric_public :
+                secret_F = Symmetric_public.read().replace("\n","",2).split("#")  
+                secret = str("".join(secret_F[4:-4]))
+                secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+                .replace(" ",'').replace("b'",'').replace("'",'').split("-")
+                Key = secret_F
+                self.key = int(Key[0])
+                self.NKey= int(Key[-1][1:]) 
+            elif self.args.private:
+                with open(self.args.private,'r') as Symmetric_Private :
+                    secret_F = Symmetric_Private.read().replace("\n","",2).split("#")
+                    secret = str("".join(secret_F[4:-4]))
+                    secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+                    .replace(" ",'').replace("b'",'').replace("'",'').split("-")
+                    Key = secret_F
+                    self.key = int(Key[0])
+                    self.NKey= int(Key[-1][1:])        
+            print("🔐 Encrypt-Info 🔐 : "+'\n'+"="*20)                
             list_Encrypt = []
             count = 0
             count2 = 0
@@ -191,7 +209,10 @@ class RSA_algorithm:
             for Mas in list_Str :
                 count +=1             
                 total = (count / int(len(list_Str))) * 100
-                Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
+                if self.args.public or self.args.private:
+                    Ciphertext = ( Mas ** self.key ) % self.NKey
+                else:   
+                    Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
                 list_Encrypt.append(Ciphertext)
                 D = '['+f*L+']'
                 if len(list_Str) <= 20 :
@@ -199,7 +220,7 @@ class RSA_algorithm:
                 else:    
                     go = str(int(total))+D.replace(f,'#'*count2,1)
                 print("⏳ Ciphertext   ::------------:: ",str(random.random())[2:])
-                print("⚙️  Processed    ::------------:: %",f"{go:<120}")
+                print("⚙️  Processed    ::------------:: %",f"{go}", flush=True)
                 sys.stdout.write('\x1b[1A')
                 sys.stdout.write('\x1b[2K')
                 sys.stdout.write('\x1b[1A')
@@ -246,11 +267,17 @@ class RSA_algorithm:
             path = path.read()
         with open('.path2','r') as path2:
              path2 = path2.read()    
-        list_Decrypt = []
-       
+        list_Decrypt = []   
         try : 
-            with open (path2+"-Private-Key.pem",'r') as R_secret :            
-                secret_F = R_secret.read().replace("\n","",2).split("#")
+            if self.args.public:
+               with open(self.args.public,'r') as Symmetric_public :
+                secret_F = Symmetric_public.read().replace("\n","",2).split("#")  
+            elif self.args.private:
+                with open(self.args.private,'r') as Symmetric_Private :
+                    secret_F = Symmetric_Private.read().replace("\n","",2).split("#")    
+            else:
+                with open (path2+"-Private-Key.pem",'r') as R_secret :            
+                   secret_F = R_secret.read().replace("\n","",2).split("#")       
             secret = str("".join(secret_F[4:-4]))
             secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
             .replace(" ",'').replace("b'",'').replace("'",'').split("-")
@@ -276,7 +303,7 @@ class RSA_algorithm:
                     else:   
                        go = str(int(total))+D.replace(f,'#'*count2,1)
                     print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
-                    print("⚙️  Processed    ::------------:: %",f"{go:<120}")
+                    print("⚙️  Processed    ::------------:: %",f"{go}", flush=True)
                     sys.stdout.write('\x1b[1A')
                     sys.stdout.write('\x1b[2K')
                     sys.stdout.write('\x1b[1A')
@@ -310,7 +337,7 @@ class RSA_algorithm:
                         else:    
                             go = str(int(total))+D.replace(f,'#'*count2,1)
                         print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
-                        print("⚙️  Processed    ::------------:: %",f"{go:<120}")
+                        print("⚙️  Processed    ::------------:: %",f"{go}", flush=True)
                         sys.stdout.write('\x1b[1A')
                         sys.stdout.write('\x1b[2K')
                         sys.stdout.write('\x1b[1A')
@@ -337,13 +364,15 @@ class RSA_algorithm:
             print("💯  Decryption Process    ::------------::  Done ")   
             time.sleep(.15)
             print("💾  location              ::------------::  file://"+path+str(path2.split("/")[-2]))  
-        except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+        #except Exception as E:
+        #    print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()                   
     def algorithm (self):
-        if self.args.message :
+        if self.args.message\
+        and not self.args.private\
+        and not self.args.public:
            self.ReadMessage()
            self.Gen_PP()
            self.En_crypt_Message()
@@ -353,6 +382,13 @@ class RSA_algorithm:
         and self.args.decrypt\
         and (self.args.base64 or self.args.hex):
            self.De_crypt_Message()
+        elif (self.args.public  or self.args.private) and self.args.message\
+        and self.args.enctypt and not self.args.key :
+            self.ReadMessage()
+            self.En_crypt_Message()
+        elif (self.args.public  or self.args.private) and  self.args.decrypt and not self.args.message\
+        :
+             self.De_crypt_Message()               
         else:
             print(
                    """usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
@@ -368,6 +404,8 @@ class RSA_algorithm:
         parser.add_argument("-B",'--base64'    , action="store_true" ,help   = " Output Message Encrypt Base64 Format")
         parser.add_argument("-K",'--key'       , metavar=''          ,help   = " Genreagte Key public-key , Private-Key")
         parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " Encrypt Cihper Text file To Decrypt ")
+        parser.add_argument("-p",'--public'    ,metavar=''           ,help   = " Encrypt or Decrypt use Symmetric Key public key")
+        parser.add_argument("-P",'--private'   ,metavar=''           ,help   = " Encrypt or Decrypt use Symmetric Key private key ")
         self.args = parser.parse_args() 
         if len(sys.argv)!=1 :
             pass
