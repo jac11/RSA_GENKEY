@@ -13,6 +13,7 @@ import sys
 import os
 import time
 import string
+
 print("""                                                      
    ╦═╗╔═╗╔═╗   ╔═╗╔═╗╔╗╔╦╔═╔═╗╦ ╦ 🔐
    ╠╦╝╚═╗╠═╣───║ ╦║╣ ║║║╠╩╗║╣ ╚╦╝
@@ -181,15 +182,19 @@ class RSA_algorithm:
             path = readnewpath.read()       
         try: 
             if self.args.public:
-               with open(self.args.public,'r') as Symmetric_public :
-                secret_F = Symmetric_public.read().replace("\n","",2).split("#")  
-                secret = str("".join(secret_F[4:-4]))
-                secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
-                .replace(" ",'').replace("b'",'').replace("'",'').split("-")
-                Key = secret_F
-                self.key = int(Key[0])
-                self.NKey= int(Key[-1][1:]) 
+                with open(".path",'r') as readnewpath:
+                    path = readnewpath.read()       
+                with open(self.args.public,'r') as Symmetric_public :
+                    secret_F = Symmetric_public.read().replace("\n","",2).split("#")  
+                    secret = str("".join(secret_F[4:-4]))
+                    secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+                    .replace(" ",'').replace("b'",'').replace("'",'').split("-")
+                    Key = secret_F
+                    self.key = int(Key[0])
+                    self.NKey= int(Key[-1][1:]) 
             elif self.args.private:
+                with open(".path",'r') as readnewpath:
+                    path = readnewpath.read()  
                 with open(self.args.private,'r') as Symmetric_Private :
                     secret_F = Symmetric_Private.read().replace("\n","",2).split("#")
                     secret = str("".join(secret_F[4:-4]))
@@ -200,46 +205,42 @@ class RSA_algorithm:
                     self.NKey= int(Key[-1][1:])        
             print("🔐 Encrypt-Info 🔐 : "+'\n'+"="*20)                
             list_Encrypt = []
-            count = 0
-            count2 = 0
-            f = '-'
-            L =len(list_Str) 
-            if L > 100 :
-                L =100
-            for Mas in list_Str :
-                count +=1             
-                total = (count / int(len(list_Str))) * 100
+            self.i = 0
+            self.s=len(list_Str)
+            for Mas in list_Str :   
                 if self.args.public or self.args.private:
                     Ciphertext = ( Mas ** self.key ) % self.NKey
                 else:   
                     Ciphertext = ( Mas ** self.Public_key ) % self.N_Num
                 list_Encrypt.append(Ciphertext)
-                D = '['+f*L+']'
-                if len(list_Str) <= 20 :
-                    go = str(int(total))
-                else:    
-                    go = str(int(total))+D.replace(f,'#'*count2,1)
-                print("⏳ Ciphertext   ::------------:: ",str(random.random())[2:])
-                print("⚙️  Processed    ::------------:: %",f"{go}", flush=True)
-                sys.stdout.write('\x1b[1A')
-                sys.stdout.write('\x1b[2K')
-                sys.stdout.write('\x1b[1A')
-                sys.stdout.write('\x1b[2K')
-                count2 +=1
-                L -=1
+                self.Progress_bar()                  
             if self.args.base64 and self.args.enctypt :   
                 Encrypt = str("".join(str(list_Encrypt))).replace("[",'')\
                 .replace(',','').replace("]",'')   
                 E_base64 = str(base64.b64encode(bytes(Encrypt, 'utf-8')))\
                 .replace("b'",'').replace("'",'')
-                with open(path+"/EncryptB64-"+str(path.split("/")[-1]) ,'w') as DecryptW:
-                    DecryptW.write(E_base64)
-            if  self.args.hex and self.args.enctypt :
-                with open (path+"/EncryptHEX-"+str(path.split("/")[-1]),'w') as HEXData :
-                    for Hex in list_Encrypt :
-                        Hex  = hex(Hex)
-                        with open (path+"/EncryptHEX-"+str(path.split("/")[-1]) ,'a') as HEXData :
-                            HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
+                if self.args.private or self.args.public:
+                    with open(path+self.args.message.split("/")[-1]+\
+                        "/EncryptB64-"+self.args.message.split("/")[-1] ,'w') as DecryptW:
+                        DecryptW.write(E_base64)
+                else:     
+                    with open(path+"/EncryptB64-"+str(path.split("/")[-1]) ,'w') as DecryptW:
+                         DecryptW.write(E_base64)
+            if  self.args.hex and self.args.enctypt  :
+                if self.args.private or self.args.public:
+                    with open (path+self.args.message.split("/")[-1]+\
+                            "/EncryptHEX-"+self.args.message.split("/")[-1] ,'a') as HEXData :
+                        for Hex in list_Encrypt :
+                            Hex  = hex(Hex)
+                            with open (path+self.args.message.split("/")[-1]+\
+                                "/EncryptHEX-"+self.args.message.split("/")[-1] ,'a') as HEXData :
+                                HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
+                else:        
+                    with open (path+"/EncryptHEX-"+str(path.split("/")[-1]),'w') as HEXData :
+                        for Hex in list_Encrypt :
+                            Hex  = hex(Hex)
+                            with open (path+"/EncryptHEX-"+str(path.split("/")[-1]) ,'a') as HEXData :
+                                 HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
            
             time.sleep(.15) 
             print("✍️   Plain-text           ::------------:: ", str("".join(self.args.message.split("/")[-1])))
@@ -255,7 +256,10 @@ class RSA_algorithm:
             time.sleep(.15) 
             print("💯  Encrypted Process    ::------------::  Done ")   
             time.sleep(.15)
-            print("💾  location             ::------------::  file://"+path)            
+            if self.args.private or self.args.public :
+                print("💾  location             ::------------::  file://"+path+self.args.message.split("/")[-1])
+            else:    
+                print("💾  location             ::------------::  file://"+path)            
         except Exception as E:
             print("🚨️🚧️  Error  ::------------:: ".strip(),E)
         except KeyboardInterrupt :
@@ -288,66 +292,30 @@ class RSA_algorithm:
                 with open(self.args.file,'r') as Ciphertext_R :
                      DeCipher = Ciphertext_R.read()     
                 D_baes64 = base64.b64decode(DeCipher).decode("utf-8").split(" ")
-                count = 0
-                count2 = 0
-                f = '-'
-                L = len(D_baes64)
-                if L > 100:
-                   L = 100   
-                for Char in D_baes64 : 
-                    count +=1 
-                    total = (count / int(len(D_baes64))) * 100
-                    D = '['+f*L+']'
-                    if len(D_baes64) <= 20 :
-                       go = str(int(total))
-                    else:   
-                       go = str(int(total))+D.replace(f,'#'*count2,1)
-                    print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
-                    print("⚙️  Processed    ::------------:: %",f"{go}", flush=True)
-                    sys.stdout.write('\x1b[1A')
-                    sys.stdout.write('\x1b[2K')
-                    sys.stdout.write('\x1b[1A')
-                    sys.stdout.write('\x1b[2K')
+                self.s = len(D_baes64 )
+                self.i = 0
+                for Char in D_baes64 :     
                     Char = int(Char)   
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt) 
-                    count2 +=1        
-                    L -=1  
-                Plaintext = "".join(list_Decrypt)            
+                    Plaintext = "".join(list_Decrypt) 
+                    self.Progress_bar()  
+                                
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptB64_"+\
-                    str("".join(path2.split("/")[-2])),'w') as Text :
-                      Text.write(Plaintext)
+                         str("".join(path2.split("/")[-2])),'w') as Text :
+                        Text.write(Plaintext)
             if self.args.hex:
                 
                 with open(self.args.file,'r') as Ciphertext_R :
                     DeCipher = Ciphertext_R.read().split(" ")
                     DeCipher  = DeCipher[1:]
-                    count = 0
-                    count2 = 0
-                    f = '-'
-                    L = len(DeCipher)
-                    if L > 100:
-                        L = 100
-                    for HEX in DeCipher :
-                        count +=1 
-                        total = (count / int(len(DeCipher))) * 100
-                        D = '['+f*L+']'
-                        if len(DeCipher) <= 20 :
-                            go = str(int(total))
-                        else:    
-                            go = str(int(total))+D.replace(f,'#'*count2,1)
-                        print("⏳ Decryption   ::------------:: ",str(random.random())[2:]) 
-                        print("⚙️  Processed    ::------------:: %",f"{go}", flush=True)
-                        sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K')
-                        sys.stdout.write('\x1b[1A')
-                        sys.stdout.write('\x1b[2K')
-                                   
+                    self.s=len(DeCipher) 
+                    self.i = 0
+                    for HEX in DeCipher :                          
                         HEXTONUM = int(HEX,16)
                         Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
-                        list_Decrypt.append(Decrypt)
-                        count2 +=1         
-                        L -=1  
+                        list_Decrypt.append(Decrypt) 
+                        self.Progress_bar()  
                 Plaintext = "".join(list_Decrypt)
                 with open(str("/".join(path2.split("/")[0:-1]))+"/DecryptHEX_"+\
                     str("".join(path2.split("/")[-2])),'w')as Text :
@@ -364,8 +332,8 @@ class RSA_algorithm:
             print("💯  Decryption Process    ::------------::  Done ")   
             time.sleep(.15)
             print("💾  location              ::------------::  file://"+path+str(path2.split("/")[-2]))  
-        #except Exception as E:
-        #    print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+        except Exception as E:
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()                   
@@ -386,14 +354,38 @@ class RSA_algorithm:
         and self.args.enctypt and not self.args.key :
             self.ReadMessage()
             self.En_crypt_Message()
-        elif (self.args.public  or self.args.private) and  self.args.decrypt and not self.args.message\
-        :
+        elif (self.args.public  or self.args.private) and  self.args.decrypt and not self.args.message :
              self.De_crypt_Message()               
         else:
             print(
                    """usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
                    """Usage: [OPtion] [arguments] [ -w ] [arguments]"""
                 )
+    def  Progress_bar (self):
+        D = '-'*100
+        s = self.s
+        if s <=20 :
+            p =int(100*(int(self.i)/int(s)))+5
+        elif  s <= 30:
+            p =int(100*(int(self.i)/int(s)))+4
+        elif s >= 40 and  s <=50:
+            p =int(100*(int(self.i)/int(s)))+3
+        elif s <= 50 and s >=90:
+            p =int(100*(int(self.i)/int(s)))+2
+        elif s >= 100:   
+            p =int(100*(int(self.i)/int(s)))+1  
+        else:
+            p =int(100*(int(self.i)/int(s)))+1  
+        self.p = p             
+        self.c = D.replace("-",'#',p)
+        print("⏳ Ciphertext   ::------------:: "+str(random.random())[2:])
+        print("⚙️  Progress:    ::------------:: [%"+f"{self.p}"+']['+self.c+']')
+        sys.stdout.write('\x1b[1A')
+        sys.stdout.write('\x1b[2K')
+        sys.stdout.write('\x1b[1A')
+        sys.stdout.write('\x1b[2K')
+        self.i +=1
+                 
     def Usage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-M",'--message'   , metavar=''          ,help   = " Path of  Plaintext message to Decrypt ")
@@ -414,3 +406,4 @@ class RSA_algorithm:
             exit()       
 if  __name__ == '__main__':
     RSA_algorithm()
+
