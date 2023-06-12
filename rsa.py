@@ -256,6 +256,10 @@ class RSA_algorithm:
             time.sleep(.15) 
             print("💯  Encrypted Process    ::------------::  Done ")   
             time.sleep(.15)
+            if self.args.image:
+                print("📸️  Matted               ::------------::  Hiden Data In Image" )
+                print("🦊️  Type                 ::------------::  MeteData" )
+                print("🏜️   Image name           ::------------:: ",self.args.image.split("/")[-1] )
             if self.args.private or self.args.public :
                 print("💾  location             ::------------::  file://"+path+self.args.message.split("/")[-1])
             else:    
@@ -344,6 +348,8 @@ class RSA_algorithm:
            self.ReadMessage()
            self.Gen_PP()
            self.En_crypt_Message()
+           if self.args.image and self.args.hiden:
+              self.Image_Hiden_Data() 
         elif self.args.key and self.args.key and not self.args.message:
            self.Gen_PP()   
         elif self.args.secret and self.args.file\
@@ -354,8 +360,11 @@ class RSA_algorithm:
         and self.args.enctypt and not self.args.key :
             self.ReadMessage()
             self.En_crypt_Message()
-        elif (self.args.public  or self.args.private) and  self.args.decrypt and not self.args.message :
-             self.De_crypt_Message()               
+            if self.args.image and self.args.hiden:
+               self.Image_Hiden_Data()
+        elif (self.args.public  or self.args.private) and\
+        self.args.decrypt and not self.args.message :
+             self.De_crypt_Message()                                 
         else:
             print(
                    """usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
@@ -385,7 +394,43 @@ class RSA_algorithm:
         sys.stdout.write('\x1b[1A')
         sys.stdout.write('\x1b[2K')
         self.i +=1
-                 
+    def Image_Hiden_Data(self):
+        try:
+           from PIL import Image
+           from PIL.PngImagePlugin import PngInfo  
+        except Exception :
+           os.system("pip install Pillow 2>/dev/null 2>&1")  
+           from PIL import Image
+           from PIL.PngImagePlugin import PngInfo 
+        targetImage = Image.open(self.args.image)
+        metadata = PngInfo()
+        if self.args.message and self.args.enctypt:
+            if self.args.base64:
+                with open(path+self.args.message.split("/")[-1]+"/EncryptB64-"+\
+                    self.args.message.split("/")[-1] ,'r') as Imagedata:
+                    Data_read = Imagedata.read()
+            elif self.args.hex:
+                with open(path+self.args.message.split("/")[-1]+"/EncryptHEX-"+\
+                    self.args.message.split("/")[-1] ,'r') as Imagedata:
+                    Data_read = Imagedata.read()     
+            if self.args.private :
+                with open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'r' ) as Key_Image :
+                    Key_Image = str(base64.b64encode(bytes(Key_Image.read(), 'utf-8')))
+
+            elif self.args.public : 
+                with open(self.args.public.replace("-Public-key.pem",'')+"-Private-Key.pem",'r' ) as Key_Image :
+                    Key_Image = str(base64.b64encode(bytes(Key_Image.read(), 'utf-8')))
+            else:
+                with open(path+self.args.message.split("/")[-1]+'/'+\
+                self.args.message.split("/")[-1]+"-Private-Key.pem" ,'r') as Key_Image:     
+                    Key_Image = str(base64.b64encode(bytes(Key_Image.read(), 'utf-8'))) 
+        metadata.add_text("AddressM",Data_read )
+        metadata.add_text("KeyM",Key_Image  )
+        targetImage.save(path+self.args.message.split("/")[-1]+\
+        '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png", pnginfo=metadata)
+
+
+
     def Usage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-M",'--message'   , metavar=''          ,help   = " Path of  Plaintext message to Decrypt ")
@@ -398,7 +443,9 @@ class RSA_algorithm:
         parser.add_argument("-F",'--file'      ,metavar=''           ,help   = " Encrypt Cihper Text file To Decrypt ")
         parser.add_argument("-p",'--public'    ,metavar=''           ,help   = " Encrypt or Decrypt use Symmetric Key public key")
         parser.add_argument("-P",'--private'   ,metavar=''           ,help   = " Encrypt or Decrypt use Symmetric Key private key ")
-        self.args = parser.parse_args() 
+        parser.add_argument("-I",'--image'    ,metavar=''            ,help   = " Image to write matadata into ")
+        parser.add_argument("-N",'--hiden'    ,action='store_true'   ,help   = " write hiden data into the image the Encrypt message and key for Decrypt the message ")
+        self.args = parser.parse_args()  
         if len(sys.argv)!=1 :
             pass
         else:
