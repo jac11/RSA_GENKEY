@@ -5,7 +5,7 @@
 ### info :
 * [RSA](https://en.wikipedia.org/wiki/Encryption)
     
-```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]
+```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N]
 
 Usage: [OPtion] [arguments] [ -w ] [arguments]
 
@@ -17,7 +17,11 @@ options:
   -H, --hex        Output Message Encrypt Hex Format
   -S , --secret    Private key To Decrypt Cihper Text
   -B, --base64     Output Message Encrypt Base64 Format
-  -K, --key        Genreagte Key public-key , Private-Key
+  -K , --key       Genreagte Key public-key , Private-Key
   -F , --file      Encrypt Cihper Text file To Decrypt
-  -O , --output    Output key Name
+  -p , --public    Encrypt or Decrypt use Symmetric Key public key
+  -P , --private   Encrypt or Decrypt use Symmetric Key private key
+  -I , --image     Image to write matadata into
+  -N, --hiden      write hiden data into the image the Encrypt message and key for Decrypt the message
+
 ```
