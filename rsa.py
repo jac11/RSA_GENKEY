@@ -285,7 +285,8 @@ class RSA_algorithm:
                     except Exception:
                         path = path+'/'+str(self.args.private.split('-')[0])+'/'
                 else:      
-                     pass        
+                     pass     
+
         if os.path.exists(path):
             for dir in  os.listdir(path) : 
                 if ".pem" in dir :
@@ -315,27 +316,17 @@ class RSA_algorithm:
                    shutil.copy(self.args.secret , path) 
                 except shutil.SameFileError:
                     pass   
-            else:
-                if self.args.public :
-                    try:
-                        shutil.copy(self.args.public , path)
-                    except shutil.SameFileError:
-                        pass   
-                else:
-                    if self.args.private :
-                        try:
-                            shutil.copy(self.args.private , path)
-                        except shutil.SameFileError:
-                           pass              
+            elif self.args.public :
+                try:
+                     shutil.copy(self.args.public , path)
+                except shutil.SameFileError:
+                    pass   
+            elif self.args.private :
+                try:
+                    shutil.copy(self.args.private , path)
+                except shutil.SameFileError:
+                    pass 
         list_Decrypt = []  
-        if self.args.image and sefl.args.hiden :
-            self.Decrypt_MataData_Image()
-            try:
-                with open(str(self.args.image.split('/')[-1]).split(".")[0]+"-Public-key.pem",'r')  as Key_Image :
-                    secret_F = Key_Image.read().replace("\n","",2).split("#") 
-            except Exception:
-                with open(str(self.args.image.split('/')[-1]).split(".")[0]+"-Private-key.pem",'r')  as Key_Image :
-                        secret_F = Key_Image.read().replace("\n","",2).split("#")                
         try : 
             if self.args.public:
                with open(self.args.public,'r') as Symmetric_public :
@@ -343,6 +334,16 @@ class RSA_algorithm:
             elif self.args.private:
                 with open(self.args.private,'r') as Symmetric_Private :
                     secret_F = Symmetric_Private.read().replace("\n","",2).split("#")    
+            elif self.args.image and self.args.exif:
+                if '/' not in self.args.image:
+                    try:
+                        path = path = path+self.args.image.split(".")[0]+'/'
+                    except Exception :
+                        path = path+'/'+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'+self.args.image.split('.')[0]  
+                else:
+                    path = path +'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])+'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])             
+                with open (path+"-Public-key.pem",'r') as write_Image_Key:
+                    secret_F = write_Image_Key.read().replace("\n","",2).split("#")
             else:
                 with open (path+path.split('/')[-2]+"-Private-Key.pem",'r') as R_secret :            
                    secret_F = R_secret.read().replace("\n","",2).split("#")       
@@ -353,8 +354,8 @@ class RSA_algorithm:
             privateK = int(Key[0])
             NKey= int(Key[-1][1:])   
             if self.args.base64 :
-                if self.args.image and self.args.hiden :
-                    with open(path,'r') as Ciphertext_R :
+                if self.args.image and self.args.exif :
+                   with open(str("/".join(path.split('/')[0:-1]))+'/'+"Message.txt",'r') as Ciphertext_R :
                         DeCipher = Ciphertext_R.read()
                 else:     
                     with open(self.args.file,'r') as Ciphertext_R :
@@ -373,7 +374,6 @@ class RSA_algorithm:
                          str("".join(path.split("/")[-2])),'w') as Text :
                         Text.write(Plaintext)
             if self.args.hex:
-                
                 with open(self.args.file,'r') as Ciphertext_R :
                     DeCipher = Ciphertext_R.read().split(" ")
                     DeCipher  = DeCipher[1:]
@@ -389,7 +389,12 @@ class RSA_algorithm:
                     str("".join(path.split("/")[-2])),'w')as Text :
                       Text.write(Plaintext)
             time.sleep(.15) 
-            print("🔐  Eecryption-message    ::------------::  " +str(self.args.file.split("/")[-1]) )
+            if self.args.image and self.args.exif:
+                print("📸️  Matted               ::------------::  Hiden Data In Image" )
+                print("🦊️  Type                 ::------------::  MeteData" )
+                print("🏜️   Image name           ::------------:: ",self.args.image.split("/")[-1] )
+            else:     
+                print("🔐  Eecryption-message    ::------------::  " +str(self.args.file.split("/")[-1]) )
             if self.args.base64 :
                 time.sleep(.15) 
                 print("🖨️   Decrypted-message     ::------------::  DecryptB64-"+str(path.split("/")[-2]))
@@ -399,7 +404,7 @@ class RSA_algorithm:
             time.sleep(.15)    
             print("💯  Decryption Process    ::------------::  Done ")   
             time.sleep(.15)
-            print("💾  location              ::------------::  file://"+path)  
+            print("💾  location              ::------------::  file://"+str("/".join(path.split('/')[0:-1]))+'/') 
         #except Exception as E:
          #   print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
@@ -429,7 +434,9 @@ class RSA_algorithm:
                self.Image_Hiden_Data()
         elif (self.args.public  or self.args.private) and\
         self.args.decrypt and not self.args.message :
-             self.De_crypt_Message()                                 
+             self.De_crypt_Message()    
+        elif self.args.image and self.args.exif :
+              self.Decrypt_MataData_Image()                                 
         else:
             print(
                    """usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
@@ -494,6 +501,7 @@ class RSA_algorithm:
         targetImage.save(path+self.args.message.split("/")[-1]+\
         '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png", pnginfo=metadata)
     def Decrypt_MataData_Image(self):
+        path = str(os.getcwd()+"/Decrypt_Data/")
         try:
            from PIL import Image
            from PIL.PngImagePlugin import PngInfo  
@@ -501,27 +509,42 @@ class RSA_algorithm:
            os.system("pip install Pillow 2>/dev/null 2>&1")  
            from PIL import Image
            from PIL.PngImagePlugin import PngInfo 
-        targetImage = Image.open(self.args.image)
-        Dumps = targetImage.text
-        LIST = list(iter(Dumps))
-        Message  = Dumps.get(str(LIST[0]))
-        Key = str(Dumps.get(str(LIST[1])))
-        with open("Massegs.txt",'w') as Messages :
+        if '/' not in self.args.image:
+            try:
+                path = path+self.args.image.split(".")[0]+'/'
+            except Exception :
+                path = path+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'        
+        if os.path.exists(path+self.args.image.split('.')[0]):
+           pass
+        else:
+            try:
+                os.mkdir(path)   
+            except FileExistsError :
+                 pass     
+        targetImage = Image.open(str(self.args.image))
+        Dumps = str(targetImage.text).split(':')
+        Message  = Dumps[1].replace(", 'KeyM'",'').replace("'",'')
+        Key = Dumps[2].replace('"','').replace('}','')
+        with open(path+"Message.txt",'w') as Messages :
             Messages.write(str(Message))
-        with open("Key.txt",'w') as Key_write :
+        with open(path+"Key.txt",'w') as Key_write :
             Key_write.write(Key)
-        with open("Key.txt",'r') as Key_R : 
+        with open(path+"Key.txt",'r') as Key_R : 
             Key = Key_R .read().replace('b','').replace("'",'')
             D_Key =  base64.b64decode(Key).decode("utf-8")
         for line in D_Key.split():
             if "PUBLIC" in line :
-                with open(str(self.args.image.split('/')[-1]).split(".")[0]+"-Public-key.pem",'w') as Key_Image:
-                    Key_Image = Key_Image.write(D_Key)
+                with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
+                    write_Image_Key.write(D_Key)
+                    break
             else:
                 if "PRIVATE" in line :
-                    with open(str(self.args.image.split('/')[-1]).split(".")[0]+"-Private-key.pem",'w') as Key_Image:
-                        Key_Image = Key_Image.write(D_Key)
-                       
+                    with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
+                        write_Image_Key.write(D_Key)
+                        break
+        self.De_crypt_Message()                
+
+                  
     def Usage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-M",'--message'   , metavar=''          ,help   = " Path of  Plaintext message to Decrypt ")
@@ -536,6 +559,7 @@ class RSA_algorithm:
         parser.add_argument("-P",'--private'   ,metavar=''           ,help   = " Encrypt or Decrypt use Symmetric Key private key ")
         parser.add_argument("-I",'--image'    ,metavar=''            ,help   = " Image to write matadata into ")
         parser.add_argument("-N",'--hiden'    ,action='store_true'   ,help   = " write hiden data into the image the Encrypt message and key for Decrypt the message ")
+        parser.add_argument("-e",'--exif'    ,action='store_true'   ,help   = " exif the data from image ")
         self.args = parser.parse_args()  
         if len(sys.argv)!=1 :
             pass
