@@ -14,7 +14,7 @@ import os
 import time
 import string
 import shutil
-
+from threading import Thread
 print("""                                                      
    ╦═╗╔═╗╔═╗   ╔═╗╔═╗╔╗╔╦╔═╔═╗╦ ╦ 🔐
    ╠╦╝╚═╗╠═╣───║ ╦║╣ ║║║╠╩╗║╣ ╚╦╝
@@ -272,12 +272,15 @@ class RSA_algorithm:
             exit()                               
     def De_crypt_Message(self):
         print("🎲️ Decryption-Info 🎲️ : "+'\n'+"="*20)
-        path = os.getcwd()+"/"+"Decrypt_Data"
+        with open(".path",'r') as readnewpath:
+            path = readnewpath.read()    
         if self.args.secret :
-            if '/' not in self.args.secret :
+            if '/' not in self.args.secret or '/' not in self.args.file:
                 path = path+'/'+str(self.args.secret.split('-')[0])+'/'
-            else:      
-                 path = path+'/'+str(self.args.secret.split('/')[-2])+'/'
+                NewPath = path
+            else:    
+                 path = path+'/'+"".join(str(self.args.secret.split('/')[-1]).split('-')[0])
+
         elif self.args.private or self.args.public:
                 if '/' not in self.args.private or "/" not in self.args.public :
                     try:  
@@ -286,7 +289,6 @@ class RSA_algorithm:
                         path = path+'/'+str(self.args.private.split('-')[0])+'/'
                 else:      
                      pass     
-
         if os.path.exists(path):
             for dir in  os.listdir(path) : 
                 if ".pem" in dir :
@@ -335,7 +337,7 @@ class RSA_algorithm:
                 with open(self.args.private,'r') as Symmetric_Private :
                     secret_F = Symmetric_Private.read().replace("\n","",2).split("#")    
             elif self.args.image and self.args.exif:
-                if '/' not in self.args.image:
+                if '/' not in self.args.image :
                     try:
                         path = path = path+self.args.image.split(".")[0]+'/'
                     except Exception :
@@ -345,8 +347,13 @@ class RSA_algorithm:
                 with open (path+"-Public-key.pem",'r') as write_Image_Key:
                     secret_F = write_Image_Key.read().replace("\n","",2).split("#")
             else:
-                with open (path+path.split('/')[-2]+"-Private-Key.pem",'r') as R_secret :            
-                   secret_F = R_secret.read().replace("\n","",2).split("#")       
+                try:
+                    with open (path+path.split('/')[-2]+"-Private-Key.pem",'r') as R_secret :            
+                       secret_F = R_secret.read().replace("\n","",2).split("#")    
+                except Exception:
+                    NewPath = path+'/'+"".join(str(self.args.secret.split('/')[-1]).split('-')[0])
+                    with open (NewPath+"-Private-Key.pem",'r') as R_secret :    
+                        secret_F = R_secret.read().replace("\n","",2).split("#")         
             secret = str("".join(secret_F[4:-4]))
             secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
             .replace(" ",'').replace("b'",'').replace("'",'').split("-")
@@ -368,11 +375,15 @@ class RSA_algorithm:
                     Decrypt =chr((Char ** int(privateK) )%int(NKey))
                     list_Decrypt.append(Decrypt) 
                     Plaintext = "".join(list_Decrypt) 
-                    self.Progress_bar()  
-                                
-                with open(str("/".join(path.split("/")[0:-1]))+"/DecryptB64_"+\
-                         str("".join(path.split("/")[-2])),'w') as Text :
-                        Text.write(Plaintext)
+                    self.Progress_bar()     
+                if '/' in self.args.secret :    
+                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
+                           str(NewPath.split('/')[-1]),'w') as Text :
+                           Text.write(Plaintext)
+                else:
+                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
+                        str(NewPath.split('/')[-2]),'w') as Text :
+                        Text.write(Plaintext)           
             if self.args.hex:
                 with open(self.args.file,'r') as Ciphertext_R :
                     DeCipher = Ciphertext_R.read().split(" ")
@@ -383,9 +394,11 @@ class RSA_algorithm:
                         HEXTONUM = int(HEX,16)
                         Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
                         list_Decrypt.append(Decrypt) 
-                        self.Progress_bar()  
+                        self.Progress_bar() 
+                       
+
                 Plaintext = "".join(list_Decrypt)
-                with open(str("/".join(path.split("/")[0:-1]))+"/DecryptHEX_"+\
+                with open(NewPath+"/DecryptHEX_"+\
                     str("".join(path.split("/")[-2])),'w')as Text :
                       Text.write(Plaintext)
             time.sleep(.15) 
@@ -404,7 +417,9 @@ class RSA_algorithm:
             time.sleep(.15)    
             print("💯  Decryption Process    ::------------::  Done ")   
             time.sleep(.15)
-            print("💾  location              ::------------::  file://"+str("/".join(path.split('/')[0:-1]))+'/') 
+            
+            print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
+
         #except Exception as E:
          #   print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
