@@ -398,9 +398,14 @@ class RSA_algorithm:
                        
 
                 Plaintext = "".join(list_Decrypt)
-                with open(NewPath+"/DecryptHEX_"+\
-                    str("".join(path.split("/")[-2])),'w')as Text :
-                      Text.write(Plaintext)
+                if '/' in self.args.secret :    
+                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
+                           str(NewPath.split('/')[-1]),'w') as Text :
+                           Text.write(Plaintext)
+                else:
+                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
+                        str(NewPath.split('/')[-2]),'w') as Text :
+                        Text.write(Plaintext)   
             time.sleep(.15) 
             if self.args.image and self.args.exif:
                 print("📸️  Matted               ::------------::  Hiden Data In Image" )
