@@ -5,7 +5,7 @@
 ### info :
 * [RSA](https://en.wikipedia.org/wiki/Encryption)
     
-```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N]
+```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]
 
 Usage: [OPtion] [arguments] [ -w ] [arguments]
 
@@ -23,5 +23,6 @@ options:
   -P , --private   Encrypt or Decrypt use Symmetric Key private key
   -I , --image     Image to write matadata into
   -N, --hiden      write hiden data into the image the Encrypt message and key for Decrypt the message
+  -e, --exif       exif the data from image
 
 ```
