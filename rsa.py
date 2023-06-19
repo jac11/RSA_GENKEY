@@ -236,6 +236,7 @@ class RSA_algorithm:
                             with open (path+self.args.message.split("/")[-1]+\
                                 "/EncryptHEX-"+self.args.message.split("/")[-1] ,'a') as HEXData :
                                 HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
+
                 else:        
                     with open (path+"/EncryptHEX-"+str(path.split("/")[-1]),'w') as HEXData :
                         for Hex in list_Encrypt :
@@ -339,11 +340,11 @@ class RSA_algorithm:
             elif self.args.image and self.args.exif:
                 if '/' not in self.args.image :
                     try:
-                        path = path = path+self.args.image.split(".")[0]+'/'
+                        path = path = path+self.args.image.split(".")[0]+'/'+self.args.image.split(".")[0]
                     except Exception :
                         path = path+'/'+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'+self.args.image.split('.')[0]  
-                else:
-                    path = path +'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])+'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])             
+                else:           
+                    path = path +'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])+'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])            
                 with open (path+"-Public-key.pem",'r') as write_Image_Key:
                     secret_F = write_Image_Key.read().replace("\n","",2).split("#")
             else:
@@ -376,41 +377,65 @@ class RSA_algorithm:
                     list_Decrypt.append(Decrypt) 
                     Plaintext = "".join(list_Decrypt) 
                     self.Progress_bar()     
-                if '/' in self.args.secret :    
+                if self.args.secret  and '/' in self.args.secret:    
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
                            str(NewPath.split('/')[-1]),'w') as Text :
-                           Text.write(Plaintext)
+                           Text.write(Plaintext)  
+                elif self.args.image:
+                    NewPath = path
+                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
+                           str(NewPath.split('/')[-1]),'w') as Text :
+                           Text.write(Plaintext)                            
                 else:
+                    NewPath = path
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
                         str(NewPath.split('/')[-2]),'w') as Text :
-                        Text.write(Plaintext)           
+                        Text.write(Plaintext)  
+                   
             if self.args.hex:
-                with open(self.args.file,'r') as Ciphertext_R :
-                    DeCipher = Ciphertext_R.read().split(" ")
-                    DeCipher  = DeCipher[1:]
-                    self.s=len(DeCipher) 
-                    self.i = 0
-                    for HEX in DeCipher :                          
-                        HEXTONUM = int(HEX,16)
-                        Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
-                        list_Decrypt.append(Decrypt) 
-                        self.Progress_bar() 
+                if self.args.file: 
+                    with open(self.args.file,'r') as Ciphertext_R :
+                        DeCipher = Ciphertext_R.read().split(" ")
+                        DeCipher  = DeCipher[1:]
+                        self.s=len(DeCipher) 
+                        self.i = 0
+                        for HEX in DeCipher :                          
+                            HEXTONUM = int(HEX,16)
+                            Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
+                            list_Decrypt.append(Decrypt) 
+                            self.Progress_bar() 
                        
-
+                elif self.args.image and self.args.exif :
+                    with open(str("/".join(path.split('/')[0:-1]))+'/'+"Message.txt",'r') as Ciphertext_R : 
+                        DeCipher = Ciphertext_R.read().replace(' ','',1).split(" ")
+                        DeCipher  = DeCipher[1:]
+                        self.s=len(DeCipher) 
+                        self.i = 0
+                        for HEX in DeCipher :                          
+                            HEXTONUM = int(HEX,16)
+                            Decrypt =chr((HEXTONUM  ** int(privateK) )%int(NKey))
+                            list_Decrypt.append(Decrypt) 
+                            self.Progress_bar() 
                 Plaintext = "".join(list_Decrypt)
-                if '/' in self.args.secret :    
-                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
+                if self.args.secret : 
+                   if '/' in self.args.secret:   
+                        with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
                            str(NewPath.split('/')[-1]),'w') as Text :
                            Text.write(Plaintext)
+                elif self.args.image and self.args.exif:
+                    NewPath = path
+                    with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
+                           str(NewPath.split('/')[-1]),'w') as Text :
+                           Text.write(Plaintext)            
                 else:
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
                         str(NewPath.split('/')[-2]),'w') as Text :
                         Text.write(Plaintext)   
             time.sleep(.15) 
             if self.args.image and self.args.exif:
-                print("📸️  Matted               ::------------::  Hiden Data In Image" )
-                print("🦊️  Type                 ::------------::  MeteData" )
-                print("🏜️   Image name           ::------------:: ",self.args.image.split("/")[-1] )
+                print("📸️  Matted                ::------------::  Hiden Data In Image" )
+                print("🦊️  Type                  ::------------::  MeteData" )
+                print("🏜️   Image name            ::------------:: ",self.args.image.split("/")[-1] )
             else:     
                 print("🔐  Eecryption-message    ::------------::  " +str(self.args.file.split("/")[-1]) )
             if self.args.base64 :
@@ -421,16 +446,13 @@ class RSA_algorithm:
                 print("🖨️   Decrypted-message     ::------------::  DecryptHEX-"+str(path.split("/")[-2]))  
             time.sleep(.15)    
             print("💯  Decryption Process    ::------------::  Done ")   
-            time.sleep(.15)
-            
+            time.sleep(.15)            
             print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
-
-        #except Exception as E:
-         #   print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+        except Exception as E:
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()   
-                        
     def algorithm (self):
         if self.args.message\
         and not self.args.private\
@@ -455,7 +477,7 @@ class RSA_algorithm:
         elif (self.args.public  or self.args.private) and\
         self.args.decrypt and not self.args.message :
              self.De_crypt_Message()    
-        elif self.args.image and self.args.exif :
+        elif self.args.image and self.args.exif  :
               self.Decrypt_MataData_Image()                                 
         else:
             print(
@@ -533,7 +555,9 @@ class RSA_algorithm:
             try:
                 path = path+self.args.image.split(".")[0]+'/'
             except Exception :
-                path = path+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'        
+                path = path+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'    
+        else:
+            path = path+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'               
         if os.path.exists(path+self.args.image.split('.')[0]):
            pass
         else:
@@ -562,9 +586,7 @@ class RSA_algorithm:
                     with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
                         write_Image_Key.write(D_Key)
                         break
-        self.De_crypt_Message()                
-
-                  
+        self.De_crypt_Message()                                  
     def Usage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
         parser.add_argument("-M",'--message'   , metavar=''          ,help   = " Path of  Plaintext message to Decrypt ")
