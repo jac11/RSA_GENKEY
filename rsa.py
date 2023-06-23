@@ -297,7 +297,7 @@ class RSA_algorithm:
                     try:
                         path= path+str(self.args.file.split('-')[-1])
                     except Exception:
-                         path = path +sstr(self.args.file.split('-')[-1]) 
+                         path = path +str(self.args.file.split('-')[-1]) 
 
         if os.path.exists(path):
             for dir in  os.listdir(path) :  
@@ -442,7 +442,11 @@ class RSA_algorithm:
                     NewPath = path
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
                            str(NewPath.split('/')[-1]),'w') as Text :
-                           Text.write(Plaintext)            
+                           Text.write(Plaintext)       
+                elif self.args.private or self.args.public :
+                    with open(str("/".join(path.split('/')))+"/Decrypt_"+\
+                           str(path.split('/')[-1]),'w') as Text :
+                           Text.write(Plaintext)                             
                 else:
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptHEX_"+\
                         str(NewPath.split('/')[-2]),'w') as Text :
@@ -608,10 +612,10 @@ class RSA_algorithm:
                         break
         self.De_crypt_Message()     
     def Sys_argv(self) :   
-        if self.args.message and not (self.args.image  and not self.args.private and not self.args.public\
-        and not self.args.decrypt):
+        if self.args.message and not self.args.image  and not (self.args.private and not self.args.public)\
+        and not self.args.decrypt:
             if self.args.message and self.args.enctypt and (self.args.base64 or self.args.hex) and not self.args.image \
-                 and not  self.args.hiden and not self.args.exif:
+                 and not  self.args.hiden and not self.args.exif :
                  self.algorithm()
                  exit()
             else:
@@ -630,7 +634,7 @@ class RSA_algorithm:
                 """💡️ rsa.py --secret key-Private-Key.pem -F EncryptB64-Cryto --base64 --decrypt \n"""
                 """💡️ rsa.py --secret key-Private-Key.pem -F EncryptHEX-Cryto --hex --decrypt """)
                 exit()    
-        elif  self.args.private or self.args.public  and not self.args.image and not self.args.decrypt :
+        elif  (self.args.message and  self.args.private or self.args.public )  and not self.args.image and not self.args.decrypt :
                 if (self.args.private or self.args.public) and self.args.enctypt and \
                 self.args.message and (self.args.base64 or self.args.hex) : 
                     self.algorithm()
@@ -640,7 +644,7 @@ class RSA_algorithm:
                     """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
                     """💡️ rsa.py --private name-Private-Key.pem  or --public name-Public-Key.pem  --message  Cryto.txt  --hex or --base64 --encrypt""")   
                     exit()
-        elif self.args.decrypt and not self.args.image :          
+        elif (self.args.decrypt and self.args.file ) and (self.args.public or self.args.private) and not self.args.image and not self.args.message :          
             if  (self.args.private or self.args.public) and self.args.decrypt \
             and (self.args.base64 or self.args.hex) and self.args.file:
                 self.algorithm()
@@ -661,7 +665,7 @@ class RSA_algorithm:
                 """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
                 """💡️ rsa.py --Message Cryto.txt --enctypt --image image.jpeg --hiden --base64 or --hex """)
                 exit() 
-        elif self.args.hiden:           
+        elif self.args.hiden and self.image:           
             if self.args.image and self.args.hiden and self.args.message and\
             (self.args.base64  or self.args.hex) and self.args.enctypt \
             and  (self.args.public or self.args.private ) and not(self.args.secret):
@@ -676,22 +680,25 @@ class RSA_algorithm:
                 exit() 
         elif self.args.exif:        
             if self.args.image and self.args.exif and (self.args.base64 or self.args.hex) :
-               print('7[*] argv error')
                self.algorithm()
                exit()
             else:
-                print('7[*] argv error')
                 print(
                 """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py -I Image.png -e  --hex or --base64 """)
+                """💡️ rsa.py --image Decrypt_Data/Cryto/Mo_salah.png --exif --base64 or --hex""")
                 exit()
         elif self.args.key:
-            self.algorithm()
-            exit()
+            if self.args.key:
+                self.algorithm()
+                exit()
+            else:
+                print(
+                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa.py --key test """)
+                exit()
         else:
-            print(
-            """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-            """💡️ rsa.py --key test """)
+            print("⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]")
+            print("💡️ Check readme file  at :  https://github.com/jac11/RSA_GENKEY ")
             exit()
     def Usage (self):
         parser = argparse.ArgumentParser(description="Usage: [OPtion] [arguments] [ -w ] [arguments]")      
