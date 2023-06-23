@@ -294,15 +294,13 @@ class RSA_algorithm:
                  path = path+'/'+"".join(str(self.args.secret.split('/')[-1]).split('-')[0])
 
         elif self.args.private or self.args.public:
-                if '/' not in self.args.private or "/" not in self.args.public :
-                    try:  
-                        path = path+'/'+str(self.args.public.split('-')[0])+'/'
+                    try:
+                        path= path+str(self.args.file.split('-')[-1])
                     except Exception:
-                        path = path+'/'+str(self.args.private.split('-')[0])+'/'
-                else:      
-                     pass     
+                         path = path +sstr(self.args.file.split('-')[-1]) 
+
         if os.path.exists(path):
-            for dir in  os.listdir(path) : 
+            for dir in  os.listdir(path) :  
                 if ".pem" in dir :
                     pass
                 else:
@@ -324,7 +322,10 @@ class RSA_algorithm:
                                 except shutil.SameFileError:
                                     pass              
         else:
-            os.mkdir(path)
+            try:
+               os.mkdir(path)
+            except FileExistsError:
+                 pass   
             if self.args.secret:
                 try:
                    shutil.copy(self.args.secret , path) 
@@ -396,7 +397,11 @@ class RSA_algorithm:
                     NewPath = path
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
                            str(NewPath.split('/')[-1]),'w') as Text :
-                           Text.write(Plaintext)                            
+                           Text.write(Plaintext)    
+                elif self.args.private or self.args.public :
+                    with open(str("/".join(path.split('/')))+"/DecryptB64_"+\
+                           str(path.split('/')[-1]),'w') as Text :
+                           Text.write(Plaintext)                                      
                 else:
                     NewPath = path
                     with open(str("/".join(NewPath.split('/')[0:-1]))+"/DecryptB64_"+\
@@ -456,9 +461,13 @@ class RSA_algorithm:
                 time.sleep(.15) 
                 print("🖨️   Decrypted-message     ::------------::  DecryptHEX-"+str(path.split("/")[-2]))  
             time.sleep(.15)    
-            print("💯  Decryption Process    ::------------::  Done ")   
-            time.sleep(.15)            
-            print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
+            print("💯  Decryption Process    ::------------::  Done ")
+            if self.args.private or self.args.public :
+                time.sleep(.15)
+                print("💾  location              ::------------::  file://"+path) 
+            else:    
+                time.sleep(.15)
+                print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
         except Exception as E:
             print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
