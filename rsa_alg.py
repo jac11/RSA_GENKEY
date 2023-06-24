@@ -505,7 +505,7 @@ class RSA_algorithm:
               self.Decrypt_MataData_Image()                                 
         else:
             print(
-                   """usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
+                   """usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
                    """Usage: [OPtion] [arguments] [ -w ] [arguments]"""
                 )
     def  Progress_bar (self):
@@ -620,8 +620,8 @@ class RSA_algorithm:
                  exit()
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py -M Message.txt --hex or --beas64 """)    
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py -M Message.txt --hex or --beas64 """)    
                 exit() 
         elif self.args.secret and self.args.file :         
             if  self.args.decrypt and self.args.secret and self.args.file\
@@ -630,9 +630,9 @@ class RSA_algorithm:
                 exit()   
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py --secret key-Private-Key.pem -F EncryptB64-Cryto --base64 --decrypt \n"""
-                """💡️ rsa.py --secret key-Private-Key.pem -F EncryptHEX-Cryto --hex --decrypt """)
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py --secret key-Private-Key.pem -F EncryptB64-Cryto --base64 --decrypt \n"""
+                """💡️ rsa_alg.py --secret key-Private-Key.pem -F EncryptHEX-Cryto --hex --decrypt """)
                 exit()    
         elif  (self.args.message and  self.args.private or self.args.public )  and not self.args.image and not self.args.decrypt :
                 if (self.args.private or self.args.public) and self.args.enctypt and \
@@ -641,8 +641,8 @@ class RSA_algorithm:
                     exit()
                 else:
                     print(
-                    """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                    """💡️ rsa.py --private name-Private-Key.pem  or --public name-Public-Key.pem  --message  Cryto.txt  --hex or --base64 --encrypt""")   
+                    """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                    """💡️ rsa_alg.py --private name-Private-Key.pem  or --public name-Public-Key.pem  --message  Cryto.txt  --hex or --base64 --encrypt""")   
                     exit()
         elif (self.args.decrypt and self.args.file ) and (self.args.public or self.args.private) and not self.args.image and not self.args.message :          
             if  (self.args.private or self.args.public) and self.args.decrypt \
@@ -651,8 +651,8 @@ class RSA_algorithm:
                 exit()
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️rsa.py --decrypt --public name-Public-key.pem  or --private name-Key-kry.pem -F EncryptB64-Cryto -base64 or --hex""") 
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py --decrypt --public name-Public-key.pem  or --private name-Key-kry.pem -F EncryptB64-Cryto -base64 or --hex""") 
                 exit() 
         elif self.args.image  and not self.args.exif and not self.args.public and not self.args.private:         
             if (self.args.image and self.args.hiden) and self.args.message and\
@@ -662,8 +662,8 @@ class RSA_algorithm:
                 exit()
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py --Message Cryto.txt --enctypt --image image.jpeg --hiden --base64 or --hex """)
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py --Message Cryto.txt --enctypt --image image.jpeg --hiden --base64 or --hex """)
                 exit() 
         elif self.args.hiden and self.args.image and ( self.args.private or args.self.public):           
             if self.args.image and self.args.hiden and self.args.message and\
@@ -673,8 +673,8 @@ class RSA_algorithm:
                 exit()
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py -I Image.jpeg -M Cryto  " --base64 or -- hex " -N -E "--Private test-Private-Key.pem  or --public test-Public-Key.pem" """)
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py -I Image.jpeg -M Cryto  " --base64 or -- hex " -N -E "--Private test-Private-Key.pem  or --public test-Public-Key.pem" """)
                 exit() 
         elif self.args.exif:        
             if self.args.image and self.args.exif and (self.args.base64 or self.args.hex) :
@@ -682,8 +682,8 @@ class RSA_algorithm:
                exit()
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py --image Decrypt_Data/Cryto/Mo_salah.png --exif --base64 or --hex""")
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py --image Decrypt_Data/Cryto/Mo_salah.png --exif --base64 or --hex""")
                 exit()
         elif self.args.key:
             if self.args.key:
@@ -691,12 +691,12 @@ class RSA_algorithm:
                 exit()
             else:
                 print(
-                """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py --key test """)
+                """⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
+                """💡️ rsa_alg.py --key test """)
                 exit()
         else: 
             print("⛔️ Error argument ")
-            print("⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]")
+            print("⛔️ usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]")
             print("💡️ Check readme file  at :  https://github.com/jac11/RSA_GENKEY ")
             exit()
     def Usage (self):
