@@ -652,9 +652,9 @@ class RSA_algorithm:
             else:
                 print(
                 """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️rsa.py --decrypt --public name-Public-key.pem  or --private name-Key-kry.pem -F EncryptB64-Cryto -base64 or --hex """) 
+                """💡️rsa.py --decrypt --public name-Public-key.pem  or --private name-Key-kry.pem -F EncryptB64-Cryto -base64 or --hex""") 
                 exit() 
-        elif self.args.image  and not self.args.exif:         
+        elif self.args.image  and not self.args.exif and not self.args.public and not self.args.private:         
             if (self.args.image and self.args.hiden) and self.args.message and\
             (self.args.base64  or self.args.hex) and self.args.enctypt\
             and not (self.args.public or self.args.private )and not self.args.decrypt :
@@ -665,18 +665,16 @@ class RSA_algorithm:
                 """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
                 """💡️ rsa.py --Message Cryto.txt --enctypt --image image.jpeg --hiden --base64 or --hex """)
                 exit() 
-        elif self.args.hiden and self.image:           
+        elif self.args.hiden and self.args.image and ( self.args.private or args.self.public):           
             if self.args.image and self.args.hiden and self.args.message and\
             (self.args.base64  or self.args.hex) and self.args.enctypt \
             and  (self.args.public or self.args.private ) and not(self.args.secret):
-                print('6[*] argv error')
                 self.algorithm()
                 exit()
             else:
-                print('6[*] argv error')
                 print(
                 """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
-                """💡️ rsa.py -I Image.png -e  --hex or --base64 """)
+                """💡️ rsa.py -I Image.jpeg -M Cryto  " --base64 or -- hex " -N -E "--Private test-Private-Key.pem  or --public test-Public-Key.pem" """)
                 exit() 
         elif self.args.exif:        
             if self.args.image and self.args.exif and (self.args.base64 or self.args.hex) :
@@ -696,7 +694,8 @@ class RSA_algorithm:
                 """⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]\n"""
                 """💡️ rsa.py --key test """)
                 exit()
-        else:
+        else: 
+            print("⛔️ Error argument ")
             print("⛔️ usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]")
             print("💡️ Check readme file  at :  https://github.com/jac11/RSA_GENKEY ")
             exit()
