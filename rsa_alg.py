@@ -107,18 +107,24 @@ class RSA_algorithm:
                         break
             Value1 = str(Public_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
             .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
+            self.Value1 = Value1
+            self.en_K()          
+            Value1 = self.ck      
             Value1 = str(base64.b64encode(bytes(Value1, 'utf-8')))
             Value1 = "".join('\n%s'%Value1[i:i+56] for i in range(0, len(Value1),56))\
             .replace("\n",'',1).replace("b'",'').replace("'",'')
+            
             Value2 = str(private_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
             .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
+            self.Value1 = Value2
+            self.en_K()
+            Value2 = self.ck 
             Value2 = str(base64.b64encode(bytes(Value2, 'utf-8')))     
             Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56))\
             .replace("\n",'',1).replace("b'",'').replace("'",'')
             Style = "#"+"-"*20+"#"
 
             if self.args.message:
-
                 pbkey = path+self.args.message.split("/")[-1]+"/"+self.args.message.split("/")[-1]    #str(self.args.key)
                 with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                     Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
@@ -174,8 +180,8 @@ class RSA_algorithm:
                 newpath.write(str("/".join(pbkey.split("/")[:-1])))      
             with open(".path2",'w') as path2:
                 path2.write(pbkey)
-        except Exception as E:
-            print("🚨️🚧️  Error  : ::------------::".strip(),E)  
+       # except Exception as E:
+        #    print("🚨️🚧️  Error  : ::------------::".strip(),E)  
         except KeyboardInterrupt :
             print("🚨️🚧️  Error ::------------: KeyboardInterrupt".strip())    
             exit()                          
@@ -610,7 +616,24 @@ class RSA_algorithm:
                     with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
                         write_Image_Key.write(D_Key)
                         break
-        self.De_crypt_Message()     
+        self.De_crypt_Message()    
+    def en_K(self):
+        chars =  " "+string.punctuation+string.digits+string.ascii_letters
+        chars =[i for i in chars ] 
+        chars = chars
+        key = chars.copy()
+        random.shuffle(key)
+        self.ck= ""
+        try :
+            for letter in self.Value1:
+                index = chars.index(letter)
+                self.ck += key[index]
+        except Exception :
+            for letter in self.Value2:
+                index = chars.index(letter)
+                self.ck += key[index]    
+    def de_K(self):
+       pass        
     def Sys_argv(self) :   
         if self.args.message and not self.args.image  and not (self.args.private and not self.args.public)\
         and not self.args.decrypt:
