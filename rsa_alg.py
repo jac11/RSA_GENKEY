@@ -108,12 +108,24 @@ class RSA_algorithm:
             Value1 = str(Public_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
             .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
             self.Value1 = Value1
-            self.en_K()          
+            self.en_K()       
             Value1 = self.ck      
             Value1 = str(base64.b64encode(bytes(Value1, 'utf-8')))
             Value1 = "".join('\n%s'%Value1[i:i+56] for i in range(0, len(Value1),56))\
-            .replace("\n",'',1).replace("b'",'').replace("'",'')
-            
+            .replace("\n",'',1).replace("b'",'').replace("'",'')      
+            Located0 = "​"
+            Located1 = "‌"     
+            message = "".join(format(ord(i),"08b") for i in str(self.key))
+            midpoint = 1000
+            result = ""
+            message=[i for i in message] 
+            for i in message:
+                result += Located0 if i == "0" else Located1 if i == "1" else ""
+            Value1 = Value1[:midpoint]+result+Value1[midpoint:]
+            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel",'w') as V :
+               V.write(Value1) 
+            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel",'r') as V :
+               Value1=V.read() 
             Value2 = str(private_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
             .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
             self.Value1 = Value2
@@ -122,10 +134,23 @@ class RSA_algorithm:
             Value2 = str(base64.b64encode(bytes(Value2, 'utf-8')))     
             Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56))\
             .replace("\n",'',1).replace("b'",'').replace("'",'')
+            Located0 = "​"
+            Located1 = "‌"     
+            message = "".join(format(ord(i),"08b") for i in str(self.key))
+            midpoint = 1000
+            result = ""
+            message=[i for i in message] 
+            for i in message:
+                result += Located0 if i == "0" else Located1 if i == "1" else ""
+            Value2 = Value2[:midpoint]+result+Value2[midpoint:]
+            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel2",'w') as V :
+               V.write(Value2) 
+            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel2",'r') as V :
+               Value2=V.read() 
             Style = "#"+"-"*20+"#"
-
             if self.args.message:
-                pbkey = path+self.args.message.split("/")[-1]+"/"+self.args.message.split("/")[-1]    #str(self.args.key)
+                pbkey = path+self.args.message.split("/")[-1]+"/"+self.args.message.split("/")[-1] #str(self.args.key)
+                self.pbkey = pbkey   
                 with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                     Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
                     '\n'+Style+"END RSA PUBLIC KEY"+Style)  
@@ -139,13 +164,13 @@ class RSA_algorithm:
                 else:   
                     os.mkdir(path+self.args.key+"-KEY"+"/")   
                 pbkey = path+self.args.key+"-KEY"+"/"+self.args.key
+                self.pbkey = pbkey
                 with open(pbkey+"-Public-key.pem" ,'w') as Publickey:
                     Publickey.write(Style+"BEGIN RSA PUBLIC KEY"+Style+"\n"+Value1+\
                     '\n'+Style+"END RSA PUBLIC KEY"+Style)  
                 with open(pbkey+"-Private-Key.pem" ,'w') as PrivateKey:
                     PrivateKey.write(Style+"BEGIN RSA PRIVATE KEY"+Style+"\n"+Value2+\
                     '\n'+Style+"END RSA PRIVATE KEY"+Style)    
-
             self.N_Num       = N_Num 
             self.private_key = private_key
             self.Public_key  = Public_key   
@@ -254,11 +279,11 @@ class RSA_algorithm:
             time.sleep(.15) 
             print("✍️   Plain-text           ::------------:: ", str("".join(self.args.message.split("/")[-1])))
             time.sleep(.15)
-            if  self.args.base64 and not (self.args.private or not self.args.public) : 
+            if  self.args.base64 and not self.args.hex:# and not (self.args.private or not self.args.public) : 
                 print("🛡️   Ciphertext           ::------------::  Format Base64 ")
                 time.sleep(.15)
                 print("🔐  Encrypted message    ::------------:: " ,"EncryptB64-"+str(path.split("/")[-1]) )
-            if (self.args.private or self.args.public) :
+            elif (self.args.private or self.args.public) :
                 if self.args.base64:
                     print("🛡️   Ciphertext           ::------------::  Format Base64 ")
                     time.sleep(.15)
@@ -268,7 +293,7 @@ class RSA_algorithm:
                         print("🛡️   Ciphertext           ::------------::  Format Hex String ")
                         time.sleep(.15) 
                         print("🔐  Encrypted message    ::------------:: " ,"EncryptHEX-"+str(self.args.message.split("/")[-1]) )    
-            else:
+            elif self.args.hex and not self.args.base64:
                 print("🛡️   Ciphertext           ::------------::  Format Hex String ")
                 time.sleep(.15) 
                 print("🔐  Encrypted message    ::------------:: " ,"EncryptHEX-"+str(path.split("/")[-1]) )
@@ -298,13 +323,11 @@ class RSA_algorithm:
                 NewPath = path
             else:    
                  path = path+'/'+"".join(str(self.args.secret.split('/')[-1]).split('-')[0])
-
         elif self.args.private or self.args.public:
                     try:
                         path= path+str(self.args.file.split('-')[-1])
                     except Exception:
                          path = path +str(self.args.file.split('-')[-1]) 
-
         if os.path.exists(path):
             for dir in  os.listdir(path) :  
                 if ".pem" in dir :
@@ -350,10 +373,14 @@ class RSA_algorithm:
         list_Decrypt = []  
         try : 
             if self.args.public:
-               with open(self.args.public,'r') as Symmetric_public :
+               with open(self.args.public,'r') as Symmetric_public\
+               ,open(self.args.public,'r') as File_HData:
+                File_HData = File_HData.read()
                 secret_F = Symmetric_public.read().replace("\n","",2).split("#")  
             elif self.args.private:
-                with open(self.args.private,'r') as Symmetric_Private :
+                with open(self.args.private,'r') as Symmetric_Private\
+                , open(self.args.private,'r') as File_HData :
+                    File_HData = File_HData.read()
                     secret_F = Symmetric_Private.read().replace("\n","",2).split("#")    
             elif self.args.image and self.args.exif:
                 if '/' not in self.args.image :
@@ -363,22 +390,55 @@ class RSA_algorithm:
                         path = path+'/'+str("".join(self.args.image.split('/')[-1])).split(".")[0]+'/'+self.args.image.split('.')[0]  
                 else:           
                     path = path +'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])+'/'+str("".join(self.args.image.split('/')[-1]).split('.')[0])            
-                with open (path+"-Public-key.pem",'r') as write_Image_Key:
+                with open (path+"-Public-key.pem",'r') as write_Image_Key\
+                ,open (path+"-Public-key.pem",'r') as File_HDat:
+                    File_HData = File_HDat.read()
                     secret_F = write_Image_Key.read().replace("\n","",2).split("#")
             else:
                 try:
-                    with open (path+path.split('/')[-2]+"-Private-Key.pem",'r') as R_secret :            
-                       secret_F = R_secret.read().replace("\n","",2).split("#")    
+                    with open (path+path.split('/')[-2]+"-Private-Key.pem",'r') as R_secret\
+                    ,open (path+path.split('/')[-2]+"-Private-Key.pem",'r') as  File_HData :  
+                       File_HData =  File_HData.read()         
+                       secret_F = R_secret.read().replace("\n","",2).split("#")   
                 except Exception:
                     NewPath = path+'/'+"".join(str(self.args.secret.split('/')[-1]).split('-')[0])
-                    with open (NewPath+"-Private-Key.pem",'r') as R_secret :    
-                        secret_F = R_secret.read().replace("\n","",2).split("#")         
+                    with open (NewPath+"-Private-Key.pem",'r') as R_secret\
+                    ,open(NewPath+"-Private-Key.pem",'r') as File_HData  :                     
+                        File_HData = File_HData.read()
+                        secret_F   = R_secret.read().replace("\n","",2).split("#")
+                        
+
+            Located0 = "​"
+            Located1 = "‌"             
+            result = ""
+            File_HData = [ i for i  in File_HData]
+            for i in File_HData:
+                if i == Located0:
+                    result += "0"
+                elif i == Located1:
+                    result += "1"
+            result = "".join([chr(int(result[i:i+8],2)) for i in range(0,len(result),8)])
+            if result == "":
+               result = None    
+            f = """rÂsrÂu²rÂvRrÂuârÂv2rÂtbrÂsrÂwrÂrrÂr"rÂuÅÂrÂwrÂubrÂwÂr
+                ÂvòrÂvrrÂtBrÂvrÂrRrÂwRrÂvrÂv²rÂr¢rÂwrrÂu¢rÂt²rÂrÂrÂvârÂwbrÂuòr
+                ÂsRrÂs¢rÂrbrÂtÂrÂsÂrÂ"r"Âs"rÂrBrÂwârÂvrÂt2rÂt¢rÂurÂtrÂvÒrÂvÂrÂròuÐ§""" 
+            list_result = []         
+            self.result = result.replace('[','').replace(']','')
+            for u in self.result :
+                if u in list_result :
+                    pass
+                else:
+                    list_result.append(u)
+            self.result = list_result
             secret = str("".join(secret_F[4:-4]))
-            secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
-            .replace(" ",'').replace("b'",'').replace("'",'').split("-")
-            Key = secret_F
-            privateK = int(Key[0])
-            NKey= int(Key[-1][1:])   
+            self.secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+            .replace(" ",'').replace("b'",'').replace("'",'')#.split("\\u0")
+            self.secret_F=str("+".join(self.secret_F)).split('+')
+            self.Key = self.secret_F
+            self.de_K()
+            privateK = int(self.Key[0])
+            NKey= int(self.Key[-1][1:])   
             if self.args.base64 :
                 if self.args.image and self.args.exif :
                    with open(str("/".join(path.split('/')[0:-1]))+'/'+"Message.txt",'r') as Ciphertext_R :
@@ -509,11 +569,6 @@ class RSA_algorithm:
              self.De_crypt_Message()    
         elif self.args.image and self.args.exif  :
               self.Decrypt_MataData_Image()                                 
-        else:
-            print(
-                   """usage: rsa_alg.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-O]\n"""
-                   """Usage: [OPtion] [arguments] [ -w ] [arguments]"""
-                )
     def  Progress_bar (self):
         D = '-'*100
         s = self.s
@@ -615,25 +670,32 @@ class RSA_algorithm:
                 if "PRIVATE" in line :
                     with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
                         write_Image_Key.write(D_Key)
-                        break
+                        break              
         self.De_crypt_Message()    
     def en_K(self):
         chars =  " "+string.punctuation+string.digits+string.ascii_letters
         chars =[i for i in chars ] 
         chars = chars
-        key = chars.copy()
-        random.shuffle(key)
+        self.key = chars.copy()
+        random.shuffle(self.key)
         self.ck= ""
         try :
             for letter in self.Value1:
                 index = chars.index(letter)
                 self.ck += key[index]
         except Exception :
-            for letter in self.Value2:
+            for letter in self.Value1:
                 index = chars.index(letter)
-                self.ck += key[index]    
-    def de_K(self):
-       pass        
+                self.ck += self.key[index]            
+    def de_K(self): 
+        chars = " " + string.punctuation + string.digits + string.ascii_letters
+        cipher_text =self.Key
+        key = self.result
+        plain_text = ""
+        for letter in cipher_text:
+            index = key.index(letter)
+            plain_text += chars[index]
+        self.Key = plain_text.split(":") 
     def Sys_argv(self) :   
         if self.args.message and not self.args.image  and not (self.args.private and not self.args.public)\
         and not self.args.decrypt:
