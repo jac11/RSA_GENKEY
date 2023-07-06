@@ -106,13 +106,13 @@ class RSA_algorithm:
                     else:    
                         break
             Value1 = str(Public_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
-            .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
+            .replace("'",'').replace(",",'').replace(".",'').replace(' ','')+str(N_Num)
             self.Value1 = Value1
             self.en_K()       
             Value1 = self.ck      
             Value1 = str(base64.b64encode(bytes(Value1, 'utf-8')))
             Value1 = "".join('\n%s'%Value1[i:i+56] for i in range(0, len(Value1),56))\
-            .replace("\n",'',1).replace("b'",'').replace("'",'')      
+            .replace("\n",'',1).replace("b'",'').replace("'",'')     
             Located0 = "​"
             Located1 = "‌"     
             message = "".join(format(ord(i),"08b") for i in str(self.key))
@@ -122,15 +122,16 @@ class RSA_algorithm:
             for i in message:
                 result += Located0 if i == "0" else Located1 if i == "1" else ""
             Value1 = Value1[:midpoint]+result+Value1[midpoint:]
-            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel",'w') as V :
+            with open("./.handel",'w') as V :
                V.write(Value1) 
-            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel",'r') as V :
+            with open("./.handel",'r') as V :
                Value1=V.read() 
             Value2 = str(private_key)+"-"+str(VKEY).replace("[",'').replace("]",'')\
-            .replace("'",'').replace(",",'').replace(".",'')+str(N_Num)
+            .replace("'",'').replace(",",'').replace(".",'').replace(' ','')+str(N_Num)
             self.Value1 = Value2
             self.en_K()
-            Value2 = self.ck 
+            Value2 = self.ck
+
             Value2 = str(base64.b64encode(bytes(Value2, 'utf-8')))     
             Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56))\
             .replace("\n",'',1).replace("b'",'').replace("'",'')
@@ -143,9 +144,9 @@ class RSA_algorithm:
             for i in message:
                 result += Located0 if i == "0" else Located1 if i == "1" else ""
             Value2 = Value2[:midpoint]+result+Value2[midpoint:]
-            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel2",'w') as V :
+            with open("./.handel2",'w') as V :
                V.write(Value2) 
-            with open("/home/jacstory/Desktop/RSA_GENKEY/.handel2",'r') as V :
+            with open("./.handel2",'r') as V :
                Value2=V.read() 
             Style = "#"+"-"*20+"#"
             if self.args.message:
@@ -171,6 +172,9 @@ class RSA_algorithm:
                 with open(pbkey+"-Private-Key.pem" ,'w') as PrivateKey:
                     PrivateKey.write(Style+"BEGIN RSA PRIVATE KEY"+Style+"\n"+Value2+\
                     '\n'+Style+"END RSA PRIVATE KEY"+Style)    
+            if os.path.exists("./.handel") :
+               os.remove("./.handel")
+               os.remove("./.handel2")        
             self.N_Num       = N_Num 
             self.private_key = private_key
             self.Public_key  = Public_key   
@@ -423,14 +427,7 @@ class RSA_algorithm:
             f = """rÂsrÂu²rÂvRrÂuârÂv2rÂtbrÂsrÂwrÂrrÂr"rÂuÅÂrÂwrÂubrÂwÂr
                 ÂvòrÂvrrÂtBrÂvrÂrRrÂwRrÂvrÂv²rÂr¢rÂwrrÂu¢rÂt²rÂrÂrÂvârÂwbrÂuòr
                 ÂsRrÂs¢rÂrbrÂtÂrÂsÂrÂ"r"Âs"rÂrBrÂwârÂvrÂt2rÂt¢rÂurÂtrÂvÒrÂvÂrÂròuÐ§""" 
-            list_result = []         
-            self.result = result.replace('[','').replace(']','')
-            for u in self.result :
-                if u in list_result :
-                    pass
-                else:
-                    list_result.append(u)
-            self.result = list_result
+            self.result = str(repr(result).replace("'",'').replace('\\','').replace(",",'')[1:-1]).split()
             secret = str("".join(secret_F[4:-4]))
             self.secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
             .replace(" ",'').replace("b'",'').replace("'",'')#.split("\\u0")
@@ -538,8 +535,8 @@ class RSA_algorithm:
             else:    
                 time.sleep(.15)
                 print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
-        except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+       # except Exception as E:
+        #    print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()   
@@ -673,14 +670,15 @@ class RSA_algorithm:
                         break              
         self.De_crypt_Message()    
     def en_K(self):
-        chars =  " "+string.punctuation+string.digits+string.ascii_letters
+        chars =  str(string.digits+string.ascii_letters+string.punctuation)\
+        .replace(',','').replace("'",'').replace('\\','')
         chars =[i for i in chars ] 
         chars = chars
         self.key = chars.copy()
         random.shuffle(self.key)
         self.ck= ""
         try :
-            for letter in self.Value1:
+            for letter in self.Value1 :
                 index = chars.index(letter)
                 self.ck += key[index]
         except Exception :
@@ -688,14 +686,15 @@ class RSA_algorithm:
                 index = chars.index(letter)
                 self.ck += self.key[index]            
     def de_K(self): 
-        chars = " " + string.punctuation + string.digits + string.ascii_letters
+        chars = string.digits + string.ascii_letters+ string.punctuation\
+        .replace(',','').replace("'",'').replace('\\','') 
         cipher_text =self.Key
         key = self.result
         plain_text = ""
         for letter in cipher_text:
             index = key.index(letter)
             plain_text += chars[index]
-        self.Key = plain_text.split(":") 
+        self.Key = plain_text.split("-") 
     def Sys_argv(self) :   
         if self.args.message and not self.args.image  and not (self.args.private and not self.args.public)\
         and not self.args.decrypt:
