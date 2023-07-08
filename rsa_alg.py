@@ -14,7 +14,7 @@ import os
 import time
 import string
 import shutil
-from threading import Thread
+import binascii
 print("""                                                      
    ╦═╗╔═╗╔═╗   ╔═╗╔═╗╔╗╔╦╔═╔═╗╦ ╦ 🔐
    ╠╦╝╚═╗╠═╣───║ ╦║╣ ║║║╠╩╗║╣ ╚╦╝
@@ -591,39 +591,64 @@ class RSA_algorithm:
         sys.stdout.write('\x1b[2K')
         self.i +=1
     def Image_Hiden_Data(self):
-        try:
-           from PIL import Image
-           from PIL.PngImagePlugin import PngInfo  
-        except Exception :
-           os.system("pip install Pillow 2>/dev/null 2>&1")  
-           from PIL import Image
-           from PIL.PngImagePlugin import PngInfo 
-        targetImage = Image.open(self.args.image)
-        metadata = PngInfo()
-        if self.args.message and self.args.enctypt:
+        with open (self.args.image ,'rb') as Len :
+              Len = len(Len.read())
+              BLen =  "\n".encode()+str(Len).encode() 
+        if self.args.message and self.args.enctypt and not self.args.private and not self.args.public:
             if self.args.base64:
-                with open(path+self.args.message.split("/")[-1]+"/EncryptB64-"+\
-                    self.args.message.split("/")[-1] ,'r') as Imagedata:
-                    Data_read = Imagedata.read()
+                with open(self.args.image,'rb') as Image ,  open (path+self.args.message.split("/")[-1]+'/'+\
+                self.args.message.split("/")[-1]+"-Private-Key.pem" ,'rb') as Key_Image ,\
+                open(path+self.args.message.split("/")[-1]+"/EncryptB64-"+\
+                    self.args.message.split("/")[-1] ,'rb')  as TXT:
+                    TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
+                with open (path+self.args.message.split("/")[-1]+\
+                     '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
+                        Info_write = Info.write(TXT_H)         
             elif self.args.hex:
-                with open(path+self.args.message.split("/")[-1]+"/EncryptHEX-"+\
-                    self.args.message.split("/")[-1] ,'r') as Imagedata:
-                    Data_read = Imagedata.read()     
-            if self.args.private :
-                with open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'r' ) as Key_Image :
-                    Key_Image = str(base64.b64encode(bytes(Key_Image.read(), 'utf-8')))
-
-            elif self.args.public : 
-                with open(self.args.public.replace("-Public-key.pem",'')+"-Private-Key.pem",'r' ) as Key_Image :
-                    Key_Image = str(base64.b64encode(bytes(Key_Image.read(), 'utf-8')))
-            else:
-                with open(path+self.args.message.split("/")[-1]+'/'+\
-                self.args.message.split("/")[-1]+"-Private-Key.pem" ,'r') as Key_Image:     
-                    Key_Image = str(base64.b64encode(bytes(Key_Image.read(), 'utf-8'))) 
-        metadata.add_text("AddressM",Data_read )
-        metadata.add_text("KeyM",Key_Image  )
-        targetImage.save(path+self.args.message.split("/")[-1]+\
-        '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png", pnginfo=metadata)
+                with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptHEX-"+\
+                    self.args.message.split("/")[-1] ,'rb')  as TXT,\
+                open (path+self.args.message.split("/")[-1]+'/'+\
+                self.args.message.split("/")[-1]+"-Private-Key.pem" ,'rb') as Key_Image :
+                    TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
+                with open (path+self.args.message.split("/")[-1]+\
+                     '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
+                        Info_write = Info.write(TXT_H)              
+        elif self.args.private and self.args.message and self.args.hiden  :
+                if self.args.base64 :
+                    with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptB64-"+\
+                        self.args.message.split("/")[-1] ,'rb')  as TXT,\
+                        open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'r' ) as Key_Image :
+                             TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
+                    with open (path+self.args.message.split("/")[-1]+\
+                     '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
+                        Info_write = Info.write(TXT_H)         
+                elif self.args.hex :
+                    with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptHex-"+\
+                        self.args.message.split("/")[-1] ,'rb')  as TXT,\
+                        open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'r' ) as Key_Image :
+                             TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
+                    with open  (path+self.args.message.split("/")[-1]+\
+                     '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
+                        Info_write = Info.write(TXT_H)        
+                
+        elif self.args.public and self.args.message and self.args.hiden : 
+                if self.args.base64 :
+                    with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptB64-"+\
+                        self.args.message.split("/")[-1] ,'rb')  as TXT,\
+                        open(self.args.private.replace("-Public-key-.pem",'')+"-Private-Key.pem",'rb' ) as Key_Image :
+                             TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
+                    with (path+self.args.message.split("/")[-1]+\
+                     '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
+                        Info_write = Info.write(TXT_H)        
+                elif self.args.hex :
+                    with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptHex-"+\
+                        self.args.message.split("/")[-1] ,'rb')  as TXT,\
+                        open(self.args.private.replace("-Public-key-.pem",'')+"-Private-Key.pem",'rb' ) as Key_Image :
+                             TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
+                    with open (path+self.args.message.split("/")[-1]+\
+                     '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
+                        Info_write = Info.write(TXT_H)        
+        
     def Decrypt_MataData_Image(self):
         path = str(os.getcwd()+"/Decrypt_Data/")
         try:
