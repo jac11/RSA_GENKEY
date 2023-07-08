@@ -131,7 +131,6 @@ class RSA_algorithm:
             self.Value1 = Value2
             self.en_K()
             Value2 = self.ck
-
             Value2 = str(base64.b64encode(bytes(Value2, 'utf-8')))     
             Value2 = "".join('\n%s'%Value2[i:i+56] for i in range(0, len(Value2),56))\
             .replace("\n",'',1).replace("b'",'').replace("'",'')
@@ -221,25 +220,63 @@ class RSA_algorithm:
             if self.args.public:
                 with open(".path",'r') as readnewpath:
                     path = readnewpath.read()       
-                with open(self.args.public,'r') as Symmetric_public :
-                    secret_F = Symmetric_public.read().replace("\n","",2).split("#")  
+                with open(self.args.public,'r') as Symmetric_public ,open(self.args.public,'r') as File_HData :
+                    secret_F = Symmetric_public.read().replace("\n","",2).split("#") 
+                    File_HData = File_HData.read()
+                    Located0 = "​"
+                    Located1 = "‌"             
+                    result = ""
+                    File_HData = [ i for i  in File_HData]
+                    for i in File_HData:
+                        if i == Located0:
+                           result += "0"
+                        elif i == Located1:
+                           result += "1"
+                    result = "".join([chr(int(result[i:i+8],2)) for i in range(0,len(result),8)])
+                    if result == "":
+                        result = None    
+                    f = """rÂsrÂu²rÂvRrÂuârÂv2rÂtbrÂsrÂwrÂrrÂr"rÂuÅÂrÂwrÂubrÂwÂr
+                        ÂvòrÂvrrÂtBrÂvrÂrRrÂwRrÂvrÂv²rÂr¢rÂwrrÂu¢rÂt²rÂrÂrÂvârÂwbrÂuòr
+                        ÂsRrÂs¢rÂrbrÂtÂrÂsÂrÂ"r"Âs"rÂrBrÂwârÂvrÂt2rÂt¢rÂurÂtrÂvÒrÂvÂrÂròuÐ§""" 
+                    self.result = str(repr(result).replace("'",'').replace('\\','').replace(",",'')[1:-1]).split()
                     secret = str("".join(secret_F[4:-4]))
-                    secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
-                    .replace(" ",'').replace("b'",'').replace("'",'').split("-")
-                    Key = secret_F
-                    self.key = int(Key[0])
-                    self.NKey= int(Key[-1][1:]) 
+                    self.secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+                    .replace(" ",'').replace("b'",'').replace("'",'')#.split("\\u0")
+                    self.secret_F=str("+".join(self.secret_F)).split('+')
+                    self.Key = self.secret_F
+                    self.de_K()
+                    self.key = int(self.Key[0])
+                    self.NKey= int(self.Key[-1][1:]) 
             elif self.args.private:
                 with open(".path",'r') as readnewpath:
-                    path = readnewpath.read()  
-                with open(self.args.private,'r') as Symmetric_Private :
-                    secret_F = Symmetric_Private.read().replace("\n","",2).split("#")
+                    path = readnewpath.read()       
+                with open(self.args.private,'r') as Symmetric_Private  ,open(self.args.private,'r') as File_HData :
+                    secret_F = Symmetric_Private.read().replace("\n","",2).split("#") 
+                    File_HData = File_HData.read()
+                    Located0 = "​"
+                    Located1 = "‌"             
+                    result = ""
+                    File_HData = [ i for i  in File_HData]
+                    for i in File_HData:
+                        if i == Located0:
+                           result += "0"
+                        elif i == Located1:
+                           result += "1"
+                    result = "".join([chr(int(result[i:i+8],2)) for i in range(0,len(result),8)])
+                    if result == "":
+                        result = None    
+                    f = """rÂsrÂu²rÂvRrÂuârÂv2rÂtbrÂsrÂwrÂrrÂr"rÂuÅÂrÂwrÂubrÂwÂr
+                        ÂvòrÂvrrÂtBrÂvrÂrRrÂwRrÂvrÂv²rÂr¢rÂwrrÂu¢rÂt²rÂrÂrÂvârÂwbrÂuòr
+                        ÂsRrÂs¢rÂrbrÂtÂrÂsÂrÂ"r"Âs"rÂrBrÂwârÂvrÂt2rÂt¢rÂurÂtrÂvÒrÂvÂrÂròuÐ§""" 
+                    self.result = str(repr(result).replace("'",'').replace('\\','').replace(",",'')[1:-1]).split()
                     secret = str("".join(secret_F[4:-4]))
-                    secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
-                    .replace(" ",'').replace("b'",'').replace("'",'').split("-")
-                    Key = secret_F
-                    self.key = int(Key[0])
-                    self.NKey= int(Key[-1][1:])        
+                    self.secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
+                    .replace(" ",'').replace("b'",'').replace("'",'')#.split("\\u0")
+                    self.secret_F=str("+".join(self.secret_F)).split('+')
+                    self.Key = self.secret_F
+                    self.de_K()
+                    self.key = int(self.Key[0])
+                    self.NKey= int(self.Key[-1][1:])        
             print("🔐 Encrypt-Info 🔐 : "+'\n'+"="*20)                
             list_Encrypt = []
             self.i = 0
@@ -272,14 +309,12 @@ class RSA_algorithm:
                             with open (path+self.args.message.split("/")[-1]+\
                                 "/EncryptHEX-"+self.args.message.split("/")[-1] ,'a') as HEXData :
                                 HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
-
                 else:        
                     with open (path+"/EncryptHEX-"+str(path.split("/")[-1]),'w') as HEXData :
                         for Hex in list_Encrypt :
                             Hex  = hex(Hex)
                             with open (path+"/EncryptHEX-"+str(path.split("/")[-1]) ,'a') as HEXData :
-                                 HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
-           
+                                 HEX_ST = HEXData.write(str(Hex).replace("0x",' '))        
             time.sleep(.15) 
             print("✍️   Plain-text           ::------------:: ", str("".join(self.args.message.split("/")[-1])))
             time.sleep(.15)
@@ -312,8 +347,8 @@ class RSA_algorithm:
                 print("💾  location             ::------------::  file://"+path+self.args.message.split("/")[-1])
             else:    
                 print("💾  location             ::------------::  file://"+path)            
-        except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ".strip(),E)
+      #  except Exception as E:
+       #     print("🚨️🚧️  Error  ::------------:: ".strip(),E)
         except KeyboardInterrupt :
             print("🚨️🚧️  Error ::------------:: KeyboardInterrupt".strip())    
             exit()                               
@@ -617,7 +652,7 @@ class RSA_algorithm:
                 if self.args.base64 :
                     with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptB64-"+\
                         self.args.message.split("/")[-1] ,'rb')  as TXT,\
-                        open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'r' ) as Key_Image :
+                        open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'rb' ) as Key_Image :
                              TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
                     with open (path+self.args.message.split("/")[-1]+\
                      '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
@@ -625,7 +660,7 @@ class RSA_algorithm:
                 elif self.args.hex :
                     with open(self.args.image,'rb') as Image , open(path+self.args.message.split("/")[-1]+"/EncryptHex-"+\
                         self.args.message.split("/")[-1] ,'rb')  as TXT,\
-                        open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'r' ) as Key_Image :
+                        open(self.args.private.replace("-Private-Key.pem",'')+"-Public-key.pem",'rb' ) as Key_Image :
                              TXT_H = Image.read()+binascii.hexlify(Key_Image.read())+binascii.hexlify(TXT.read())+BLen
                     with open  (path+self.args.message.split("/")[-1]+\
                      '/'+str(self.args.image.split("/")[-1]).split(".")[0]+".png",'wb') as Info :
