@@ -686,13 +686,6 @@ class RSA_algorithm:
         
     def Decrypt_MataData_Image(self):
         path = str(os.getcwd()+"/Decrypt_Data/")
-        try:
-           from PIL import Image
-           from PIL.PngImagePlugin import PngInfo  
-        except Exception :
-           os.system("pip install Pillow 2>/dev/null 2>&1")  
-           from PIL import Image
-           from PIL.PngImagePlugin import PngInfo 
         if '/' not in self.args.image:
             try:
                 path = path+self.args.image.split(".")[0]+'/'
@@ -707,27 +700,28 @@ class RSA_algorithm:
                 os.mkdir(path)   
             except FileExistsError :
                  pass     
-        targetImage = Image.open(str(self.args.image))
-        Dumps = str(targetImage.text).split(':')
-        Message  = Dumps[1].replace(", 'KeyM'",'').replace("'",'')
-        Key = Dumps[2].replace('"','').replace('}','')
-        with open(path+"Message.txt",'w') as Messages :
-            Messages.write(str(Message))
-        with open(path+"Key.txt",'w') as Key_write :
-            Key_write.write(Key)
-        with open(path+"Key.txt",'r') as Key_R : 
-            Key = Key_R .read().replace('b','').replace("'",'')
-            D_Key =  base64.b64decode(Key).decode("utf-8")
-        for line in D_Key.split():
-            if "PUBLIC" in line :
-                with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
-                    write_Image_Key.write(D_Key)
-                    break
-            else:
-                if "PRIVATE" in line :
+        with open(self.args.image ,'rb')as LENDATA:   
+            Data = LENDATA.read().split('\n'.encode())    
+            Len = int(Data[-1].decode())
+        with open(self.args.image ,'rb')as Exif : 
+            Data = Exif.read()
+            Data = Data[Len:-(int(len(str(Len))))] 
+            Data = Data.decode()   
+            byte_string = bytes.fromhex(Data)  
+            Data = byte_string.decode() 
+            HEXFIX = len(Data.split("#")[-1])  
+            for line in Data.split():
+                if "PUBLIC" in line :
                     with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
-                        write_Image_Key.write(D_Key)
-                        break              
+                        write_Image_Key.write(Data[0:-HEXFIX])
+                        break
+                else:
+                    if "PRIVATE" in line :
+                        with open (path+path.split('/')[-2]+"-Public-key.pem",'w') as write_Image_Key:
+                            write_Image_Key.write(Data[0:-HEXFIX])
+                            break                          
+            with open(path+"Message.txt",'w') as Messages :
+                 Messages = Messages.write(Data.split("#")[-1]) 
         self.De_crypt_Message()    
     def en_K(self):
         chars =  str(string.digits+string.ascii_letters+string.punctuation)\
