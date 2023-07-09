@@ -557,8 +557,8 @@ class RSA_algorithm:
             else:    
                 time.sleep(.15)
                 print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
-       # except Exception as E:
-        #    print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+        except Exception as E:
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()   
