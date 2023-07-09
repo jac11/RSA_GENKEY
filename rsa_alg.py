@@ -733,7 +733,6 @@ class RSA_algorithm:
         key = self.result
         plain_text = ""
         for letter in cipher_text:
-            print(letter)
             index = key.index(letter)
             plain_text += chars[index]
         self.Key = plain_text.split("-") 
