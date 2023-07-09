@@ -50,8 +50,7 @@ list =[
         1787, 1789, 1801, 1811, 1823, 1831, 1847, 1861, 1867,
         1871, 1873, 1877, 1879, 1889, 1901, 1907, 1913, 1931,
         1933, 1949, 1951, 1973, 1979, 1987, 1993, 1997, 1999
-     ]
-    
+     ]  
 class RSA_algorithm:
     def __init__(self):
         self.Usage()
@@ -65,8 +64,7 @@ class RSA_algorithm:
             if os.path.exists(path+self.args.message.split("/")[-1]) :
                pass
             else:  
-                 os.mkdir(path+self.args.message.split("/")[-1])  
-           
+                 os.mkdir(path+self.args.message.split("/")[-1])             
             for L in Mes_txt :
                Num_str =list_Str.append(ord(L))
             self.Len = len(list_Str)
@@ -177,7 +175,6 @@ class RSA_algorithm:
             self.N_Num       = N_Num 
             self.private_key = private_key
             self.Public_key  = Public_key   
-
             time.sleep(.15) 
             print("🛟️  P-Value        ::------------::  **********     ✔️")
             time.sleep(.15) 
@@ -308,13 +305,13 @@ class RSA_algorithm:
                             Hex  = hex(Hex)
                             with open (path+self.args.message.split("/")[-1]+\
                                 "/EncryptHEX-"+self.args.message.split("/")[-1] ,'a') as HEXData :
-                                HEX_ST = HEXData.write(str(Hex).replace("0x",' '))
+                                HEX_ST = HEXData.write(str(Hex).replace("0x",'-'))
                 else:        
                     with open (path+"/EncryptHEX-"+str(path.split("/")[-1]),'w') as HEXData :
                         for Hex in list_Encrypt :
                             Hex  = hex(Hex)
                             with open (path+"/EncryptHEX-"+str(path.split("/")[-1]) ,'a') as HEXData :
-                                 HEX_ST = HEXData.write(str(Hex).replace("0x",' '))        
+                                 HEX_ST = HEXData.write(str(Hex).replace("0x",'-'))        
             time.sleep(.15) 
             print("✍️   Plain-text           ::------------:: ", str("".join(self.args.message.split("/")[-1])))
             time.sleep(.15)
@@ -347,8 +344,8 @@ class RSA_algorithm:
                 print("💾  location             ::------------::  file://"+path+self.args.message.split("/")[-1])
             else:    
                 print("💾  location             ::------------::  file://"+path)            
-      #  except Exception as E:
-       #     print("🚨️🚧️  Error  ::------------:: ".strip(),E)
+        except Exception as E:
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E)
         except KeyboardInterrupt :
             print("🚨️🚧️  Error ::------------:: KeyboardInterrupt".strip())    
             exit()                               
@@ -445,8 +442,6 @@ class RSA_algorithm:
                     ,open(NewPath+"-Private-Key.pem",'r') as File_HData  :                     
                         File_HData = File_HData.read()
                         secret_F   = R_secret.read().replace("\n","",2).split("#")
-                        
-
             Located0 = "​"
             Located1 = "‌"             
             result = ""
@@ -466,7 +461,7 @@ class RSA_algorithm:
             secret = str("".join(secret_F[4:-4]))
             self.secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
             .replace(" ",'').replace("b'",'').replace("'",'')#.split("\\u0")
-            self.secret_F=str("+".join(self.secret_F)).split('+')
+            self.secret_F=str("+".join(self.secret_F)).split('+')  
             self.Key = self.secret_F
             self.de_K()
             privateK = int(self.Key[0])
@@ -509,7 +504,7 @@ class RSA_algorithm:
             if self.args.hex:
                 if self.args.file: 
                     with open(self.args.file,'r') as Ciphertext_R :
-                        DeCipher = Ciphertext_R.read().split(" ")
+                        DeCipher = Ciphertext_R.read().replace("-",'',1).split("-")
                         DeCipher  = DeCipher[1:]
                         self.s=len(DeCipher) 
                         self.i = 0
@@ -521,7 +516,7 @@ class RSA_algorithm:
                        
                 elif self.args.image and self.args.exif :
                     with open(str("/".join(path.split('/')[0:-1]))+'/'+"Message.txt",'r') as Ciphertext_R : 
-                        DeCipher = Ciphertext_R.read().replace(' ','',1).split(" ")
+                        DeCipher = Ciphertext_R.read().replace('-','',1).split("-")
                         DeCipher  = DeCipher[1:]
                         self.s=len(DeCipher) 
                         self.i = 0
@@ -570,8 +565,8 @@ class RSA_algorithm:
             else:    
                 time.sleep(.15)
                 print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
-       # except Exception as E:
-        #    print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+        except Exception as E:
+            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()   
@@ -584,7 +579,7 @@ class RSA_algorithm:
            self.En_crypt_Message()
            if self.args.image and self.args.hiden:
               self.Image_Hiden_Data() 
-        elif self.args.key and self.args.key and not self.args.message:
+        elif self.args.key and not self.args.message:
            self.Gen_PP()   
         elif self.args.secret and self.args.file\
         and self.args.decrypt\
@@ -740,7 +735,7 @@ class RSA_algorithm:
                 index = chars.index(letter)
                 self.ck += self.key[index]            
     def de_K(self): 
-        chars = string.digits + string.ascii_letters+ string.punctuation\
+        chars = str(string.digits+string.ascii_letters+string.punctuation)\
         .replace(',','').replace("'",'').replace('\\','') 
         cipher_text =self.Key
         key = self.result
