@@ -449,10 +449,10 @@ class RSA_algorithm:
             f = """rÂsrÂu²rÂvRrÂuârÂv2rÂtbrÂsrÂwrÂrrÂr"rÂuÅÂrÂwrÂubrÂwÂr
                 ÂvòrÂvrrÂtBrÂvrÂrRrÂwRrÂvrÂv²rÂr¢rÂwrrÂu¢rÂt²rÂrÂrÂvârÂwbrÂuòr
                 ÂsRrÂs¢rÂrbrÂtÂrÂsÂrÂ"r"Âs"rÂrBrÂwârÂvrÂt2rÂt¢rÂurÂtrÂvÒrÂvÂrÂròuÐ§""" 
-            self.result = str(repr(result).replace("'",'').replace('\\','').replace(",",'')[1:-1]).split()
+            self.result = str(repr(result).replace("'",'').replace('\\','').replace(",",'')[1:-1]).strip().split()
             secret = str("".join(secret_F[4:-4]))
             self.secret_F = str(base64.b64decode(bytes(secret,'utf-8')))\
-            .replace(" ",'').replace("b'",'').replace("'",'')#.split("\\u0")
+            .replace(" ",'').replace("b'",'').replace("'",'').strip()
             self.secret_F=str("+".join(self.secret_F)).split('+')  
             self.Key = self.secret_F
             self.de_K()
@@ -557,8 +557,8 @@ class RSA_algorithm:
             else:    
                 time.sleep(.15)
                 print("💾  location              ::------------::  file://"+"/".join(NewPath.split('/')[:-1])+'/') 
-        except Exception as E:
-            print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
+       # except Exception as E:
+        #    print("🚨️🚧️  Error  ::------------:: ".strip(),E) 
         except KeyboardInterrupt :
             print("🚨️🚧️ Error ::------------:: KeyboardInterrupt".strip())    
             exit()   
@@ -733,6 +733,7 @@ class RSA_algorithm:
         key = self.result
         plain_text = ""
         for letter in cipher_text:
+            print(letter)
             index = key.index(letter)
             plain_text += chars[index]
         self.Key = plain_text.split("-") 
