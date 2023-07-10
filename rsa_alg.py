@@ -497,7 +497,7 @@ class RSA_algorithm:
                 if self.args.file: 
                     with open(self.args.file,'r') as Ciphertext_R :
                         DeCipher = Ciphertext_R.read().replace("-",'',1).split("-")
-                        DeCipher  = DeCipher[1:]
+                        DeCipher  = DeCipher[:]
                         self.s=len(DeCipher) 
                         self.i = 0
                         for HEX in DeCipher :                          
@@ -509,7 +509,7 @@ class RSA_algorithm:
                 elif self.args.image and self.args.exif :
                     with open(str("/".join(path.split('/')[0:-1]))+'/'+"Message.txt",'r') as Ciphertext_R : 
                         DeCipher = Ciphertext_R.read().replace('-','',1).split("-")
-                        DeCipher  = DeCipher[1:]
+                        DeCipher  = DeCipher[:]
                         self.s=len(DeCipher) 
                         self.i = 0
                         for HEX in DeCipher :                          
