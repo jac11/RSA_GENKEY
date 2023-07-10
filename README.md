@@ -5,7 +5,7 @@
 ### info :
 * [RSA](https://en.wikipedia.org/wiki/Encryption)
 ## hidden data in image 
-* RAS_GENKEY all use to hidden the data key and message in image 
+* RAS_GENKEY allow user to hidden the "data" ,key and message ,in image 
 ## RSA_GENKEY option 
     
 ```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]
