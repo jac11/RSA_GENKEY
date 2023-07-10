@@ -105,7 +105,7 @@ class RSA_algorithm:
             .replace("\n",'',1).replace("b'",'').replace("'",'')     
             Located0 = "​"
             Located1 = "‌"     
-            message = "".join(format(ord(i),"08b") for i in str(self.key))
+            message = "".join(format(ord(i),"08b") for i in str(self.key)).strip()
             midpoint = 1000
             result = ""
             message=[i for i in message] 
@@ -126,7 +126,7 @@ class RSA_algorithm:
             .replace("\n",'',1).replace("b'",'').replace("'",'')
             Located0 = "​"
             Located1 = "‌"     
-            message = "".join(format(ord(i),"08b") for i in str(self.key))
+            message = "".join(format(ord(i),"08b") for i in str(self.key)).strip()
             midpoint = 1000
             result = ""
             message=[i for i in message] 
