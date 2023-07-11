@@ -4,12 +4,23 @@
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997.[2] 
 ### info :
 * [RSA](https://en.wikipedia.org/wiki/Encryption)
+-------------------------------------------------------------------------------
 ## RSA_GENKEY Features
-* support Symmetric and  asymmetric
-* key is  encroti* RAS_GENKEY allow user to hidden the "data" ,key and message ,in image 
+
+* support Symmetric and  asymmetric encryption
+* Key is encryption
+* out put encryption file format "Base64 or HEX"
+* RAS_GENKEY allow user to hidden the "data" ,key and message ,in image
+* EXrict data from image and Decrytipt
+* auto create file for each Message and named
+### how to use 
+* git clone https://www.github.com/jac11/RAS_GENKEY.git
+* cd RSA_GENKEY
+* chmod +x rsa_alg.py
+-----------------------------------------------------------------------------------------------------------
 ## RSA_GENKEY option 
     
-```usage: rsa.py [-h] [-M] [-D] [-E] [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]
+```usage: rsa.py [-h] [-M] [-D] [-E] ct [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]
 
 Usage: [OPtion] [arguments] [ -w ] [arguments]
 
@@ -30,3 +41,36 @@ options:
   -e, --exif       exif the data from image
 
 ```
+-------------------------------------------------------------------------------------------
+## Encryption  Command 
+   *  ### for encryption message 
+        * rsa_alg.py -M "Message path" -B "For Base64 format" -E "Encrption mode"
+        * rsa_alg.py -M /home/user/Message -B -E
+        * for Hex Format use  -H instead of  -B
+        * rsa_alg.py -M /home/user/Message -H -E
+   * ###  - Symmetric and  asymmetric encryption
+       * Generate Private key and public key use
+       * rsa_alg.py  -K "Nmae of the Keys"
+       * rsa_alg.py  -K Test
+       * by use this command you have private and public keys so you can use  to encryption the message by any one
+       * so if you encrypt the message by private key you will Decrypt the message use public key
+       * Captila "P" for private key
+       * Smaill "p" For public Key
+       * rsa_alg.py -P name-Private-Key.pem   --message  Cryto.txt  --hex or --base64 --encrypt
+       * rsa_alg.py -P  name-Private-Key.pem  -M Cryto.txt " -H or -B "-E
+       * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
+       * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
+       * by defult the tool will greate folder  genrate the put key  
+         * ### RECOMMANDED 
+           * ### KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT ONE FOLDER+- SO THE TOOL CAN DEDECTIT THE 
+   * ###  -Encryption Message hidden in Images
+       * To hidden Message in the Image
+       * -1 Get iMage you wish to Hidden Message in the side it any exsstion 
+       * -2 The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
+       * output  Image "PNG" exsstion
+       * user he specifies the path mssage and specifies the Image path
+       * if you will you Symmetric Key you will specifies the key User will use For Encrypt
+       * ### Command Image
+          * rsa_alg.py -I Image.jpeg -M Cryto  " --base------
+
+
