@@ -2,8 +2,10 @@
 ## RSA algorithm {Decrypt-Encrypt}
 ## what is "RSA"
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997.[2] 
-### info :
-* [LENRAN ABOUT RSA ](https://en.wikipedia.org/wiki/Encryption)
+### Learn about RSA :
+* [wiki-Encryption ](https://en.wikipedia.org/wiki/Encryption)
+* [techtarget](https://www.techtarget.com/searchsecurity/definition/RSA)
+* [tutorialspoint](https://www.tutorialspoint.com/cryptography_with_python/cryptography_with_python_understanding_rsa_algorithm.htm)
 -------------------------------------------------------------------------------
 ## RSA_GENKEY Features
 
@@ -20,9 +22,8 @@
 -----------------------------------------------------------------------------------------------------------
 ## RSA_GENKEY option 
     
-```usage: rsa.py [-h] [-M] [-D] [-E] ct [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]
-
-Usage: [OPtion] [arguments] [ -w ] [arguments]
+```
+usage: rsa_alg.py [-h] [-M] [-D] [-E] ct [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I] [-N] [-e]
 
 options:
   -h, --help       show this help message and exit
@@ -50,7 +51,7 @@ options:
        * rsa_alg.py -M /home/user/Message -B -E
        * for Hex Format use  -H instead of  -B
        * rsa_alg.py -M /home/user/Message -H -E
-   * ###  - Encryption With Same Pravite KEY nad Public Key 
+   * ###  - Encryption With  Same Pravite KEY nad Public Key each time  
        * Generate Private key and public key use
        * rsa_alg.py  -K "Nmae of the Keys"
        * rsa_alg.py  -K Test
@@ -71,10 +72,12 @@ options:
        * The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
        * output  Image "PNG" exsstion
        * user he specifies the path mssage and specifies the Image path
-       * if you will you Symmetric Key you will specifies the key User will use For Encrypt
-       * ### Command Image
+       * if User will use  same Key shuode  specifies the key  For Encrypt
+       * Keep  Put Of The Keys "PRIEVATE AND PUBLIC" aT Same One Folder so The Tool Can Dedecit The Encrypt Key abd  Decrypt Key
+       * ### Hidden Message in Image Generate Keu
           * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
           * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
           *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
-
+       * ### Hidden Message in Image wite specifies Keys "Private or Public" 
+         
 
