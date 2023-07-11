@@ -3,7 +3,7 @@
 ## what is "RSA"
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997.[2] 
 ### info :
-* [RSA](https://en.wikipedia.org/wiki/Encryption)
+* [LENRAN ABOUT RSA ](https://en.wikipedia.org/wiki/Encryption)
 -------------------------------------------------------------------------------
 ## RSA_GENKEY Features
 
@@ -43,12 +43,14 @@ options:
 ```
 -------------------------------------------------------------------------------------------
 ## Encryption  Command 
-   *  ### for encryption message 
-        * rsa_alg.py -M "Message path" -B "For Base64 format" -E "Encrption mode"
-        * rsa_alg.py -M /home/user/Message -B -E
-        * for Hex Format use  -H instead of  -B
-        * rsa_alg.py -M /home/user/Message -H -E
-   * ###  - Symmetric and  asymmetric encryption
+-------------------------------------
+ *  ### Encryption Message Different key
+       ###  *  THE TOOL WILL GENERATE DIFFERENT KEY FOR EACH TIME USE EVEN IT SAME MESSAGE  
+       * rsa_alg.py -M "Message path" -B "For Base64 format" -E "Encrption mode"
+       * rsa_alg.py -M /home/user/Message -B -E
+       * for Hex Format use  -H instead of  -B
+       * rsa_alg.py -M /home/user/Message -H -E
+   * ###  - Encryption With Same Pravite KEY nad Public Key 
        * Generate Private key and public key use
        * rsa_alg.py  -K "Nmae of the Keys"
        * rsa_alg.py  -K Test
@@ -62,15 +64,17 @@ options:
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by defult the tool will greate folder  genrate the put key  
          * ### RECOMMANDED 
-           * ### KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT ONE FOLDER+- SO THE TOOL CAN DEDECTIT THE 
-   * ###  -Encryption Message hidden in Images
+           * ### KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY
+   * ###  -Encryption Message hidden in Images 
        * To hidden Message in the Image
-       * -1 Get iMage you wish to Hidden Message in the side it any exsstion 
-       * -2 The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
+       * Get iMage you wish to Hidden Message in the side it any exsstion 
+       * The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
        * output  Image "PNG" exsstion
        * user he specifies the path mssage and specifies the Image path
        * if you will you Symmetric Key you will specifies the key User will use For Encrypt
        * ### Command Image
-          * rsa_alg.py -I Image.jpeg -M Cryto  " --base------
+          * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
+          * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
+          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
 
 
