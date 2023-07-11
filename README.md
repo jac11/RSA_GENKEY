@@ -43,7 +43,7 @@ options:
 
 ```
 -------------------------------------------------------------------------------------------
-## Encryption  Command 
+## Encryption  Mathed
 -------------------------------------
  *  ### Encryption Message Different key
        ###  *  THE TOOL WILL GENERATE DIFFERENT KEY FOR EACH TIME USE EVEN IT SAME MESSAGE  
@@ -53,12 +53,12 @@ options:
        * rsa_alg.py -M /home/user/Message -H -E
    * ###  - Encryption With  Same Pravite KEY nad Public Key each time  
        * Generate Private key and public key use
-       * rsa_alg.py  -K "Nmae of the Keys"
+       * rsa_alg.py  -K "name of the Keys"
        * rsa_alg.py  -K Test
        * by use this command you have private and public keys so you can use  to encryption the message by any one
        * so if you encrypt the message by private key you will Decrypt the message use public key
-       * Captila "P" for private key
-       * Smaill "p" For public Key
+       * Capital "P" for private key
+       * Small   "p" For public Key
        * rsa_alg.py -P name-Private-Key.pem   --message  Cryto.txt  --hex or --base64 --encrypt
        * rsa_alg.py -P  name-Private-Key.pem  -M Cryto.txt " -H or -B "-E
        * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
@@ -78,6 +78,9 @@ options:
           * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
           * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
           *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
-       * ### Hidden Message in Image wite specifies Keys "Private or Public" 
+       * ### Hidden Message in Image wite specifies Keys "Private or Public"
+          *  rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
+          *  rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
+          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
          
 
