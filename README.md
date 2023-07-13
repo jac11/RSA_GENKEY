@@ -94,8 +94,7 @@ options:
        * rsa_alg.py --file EncryptB64-Cryto --secret  name-Public-key.pem  or  -base64 or --hex --decrypt 
        * rsa_alg.py -F EncryptB64-Cryto -S name-Public-key.pem   "-B or-H" -D
    * ### $\color{yellow}{\textsf{Deryption With  Same Pravite KEY nad Public}}$
-     ###  *  FOR THIS MOTHED IF ENCRYPTION DNE BE PRIEVATE KEY "DECRYPTION HAVE TO DONE BY PUBLIC KEY"
-     ## $\color{blue}{\textsf{Decryption  Mathed }}$
+     #### $\color{blue}{\textsf{ FOR THIS MOTHED IF ENCRYPTION DNE BE PRIEVATE KEY "DECRYPTION HAVE TO DONE BY PUBLIC KEY" }}$
        * rsa_alg.py -P name-Private-Key.pem   --message  Cryto.txt  --hex or --base64 --encrypt
        * rsa_alg.py -P  name-Private-Key.pem  -M Cryto.txt " -H or -B "-E
        * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
