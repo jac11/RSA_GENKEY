@@ -1,15 +1,13 @@
-# RSA_GENKEY
-## $\textcolor{red}{ RSA algorithm_Decrypt Encrypt}$
-
-## what is "RSA"
+#  $$\color{red}{\textsf{RSA-GENKEY}}$$
+# $\color{red}{\textsf{RSA algorithm Decrypt Encryp}}$
+## $\color{yellow}{\textsf{ what is "RSA"}}$
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997
-### Learn about RSA :
+###  $\color{red}{\textsf{ Learn about RSA :}}$
 * [wiki-Encryption ](https://en.wikipedia.org/wiki/Encryption)
 * [techtarget](https://www.techtarget.com/searchsecurity/definition/RSA)
 * [tutorialspoint](https://www.tutorialspoint.com/cryptography_with_python/cryptography_with_python_understanding_rsa_algorithm.htm)
 -------------------------------------------------------------------------------
-## RSA_GENKEY Features
-
+## $\color{red}{\textsf{RSA-GENKEY Features}}$
 * support Symmetric and  asymmetric encryption
 * Key is encryption
 * out put encryption file format "Base64 or HEX"
@@ -44,7 +42,7 @@ options:
 
 ```
 -------------------------------------------------------------------------------------------
-## Encryption  Mathed
+ # $\textcolor{blue}{Encryption -Mathed}$
 -------------------------------------
  *  ### Encryption essage Different key
        ###  *  THE User Will Decrypt the Message use public key was Generate for the Message  Encryption  
@@ -66,7 +64,7 @@ options:
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by defult the tool will greate folder  genrate the put key  
        ## $\textcolor{red}{RECOMMANDED}$
-       * ### KEEP PUT OF THE KEYS " PRIEVATE AND PUBLIC "AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY
+     *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
        
    * ###  -Encryption Message hidden in Images 
        * To hidden Message in the Image
@@ -101,8 +99,8 @@ options:
        * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by defult the tool will greate folder  genrate the put key  
-         * ### RECOMMANDED 
-           * ### KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY
+         * ### RECOMMANDED
+         * ###  $\color{red}{\textsf{ KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
    * ###  -Encryption Message hidden in Images 
        * To hidden Message in the Image
        * Get image you wish to Hidden Message in the side it any exsstion 
