@@ -1,5 +1,6 @@
 # RSA_GENKEY
-## RSA algorithm {Decrypt-Encrypt}
+## $\textcolor{red}{ RSA algorithm- Decrypt-Encrypt}$
+
 ## what is "RSA"
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997
 ### Learn about RSA :
@@ -64,8 +65,8 @@ options:
        * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by defult the tool will greate folder  genrate the put key  
-       * #### $\textcolor{red}{\textsf{ *  RECOMMANDED$C }}$
-       *  KEEP PUT OF THE KEYS " PRIEVATE AND PUBLIC "AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY
+       ## $\textcolor{red}{RECOMMANDED}$
+       * ### KEEP PUT OF THE KEYS " PRIEVATE AND PUBLIC "AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY
        
    * ###  -Encryption Message hidden in Images 
        * To hidden Message in the Image
