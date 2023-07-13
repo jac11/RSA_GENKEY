@@ -64,9 +64,9 @@ options:
        * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by defult the tool will greate folder  genrate the put key  
-       * ### RECOMMANDED
-        #### $\textcolor{red}{\textsf{ * KEEP PUT OF THE KEYS " PRIEVATE AND PUBLIC " }}$
-        #### $\textcolor{red}{\textsf{ * AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$    
+       * #### $\textcolor{red}{\textsf{ *  RECOMMANDED$C }}$
+       *  KEEP PUT OF THE KEYS " PRIEVATE AND PUBLIC "AT SAME ONE FOLDER SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY
+       
    * ###  -Encryption Message hidden in Images 
        * To hidden Message in the Image
        * Get image you wish to Hidden Message in the side it any exsstion 
