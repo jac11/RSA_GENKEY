@@ -26,7 +26,7 @@ usage: rsa_alg.py [-h] [-M] [-D] [-E] ct [-H] [-S] [-B] [-K] [-F] [-p] [-P] [-I]
 
 options:
   -h, --help       show this help message and exit
-  -M, --message   Path of Plaintext message to Decrypt
+  -M, --message   Path of Plaintext message to Encrypt
   -D, --decrypt    Decrypt Mode
   -E, --encrypt    Encrypt Mode
   -H, --hex        Output Message Encrypt Hex Format
@@ -38,7 +38,7 @@ options:
   -P, --private   Encrypt or Decrypt use Symmetric Key private key
   -I, --image     Image to write metadata into
   -N, --hidden      write hidden data into the image the Encrypt message and key for Decrypt the message
-  -e, --Exif       EXIF the data from the image
+  -e, --exif       EXIF the data from the image
 
 ```
 -------------------------------------------------------------------------------------------
