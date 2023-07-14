@@ -1,5 +1,5 @@
 #  $$\color{red}{\textsf{RSA-GENKEY}}$$
-# $\color{red}{\textsf{RSA algorithm Decrypt Encryp}}$
+# $\color{red}{\textsf{RSA algorithm Decrypt Encrypt}}$
 ## $\color{yellow}{\textsf{ what is "RSA"}}$
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997
 ###  $\color{red}{\textsf{ Learn about RSA :}}$
@@ -78,6 +78,35 @@ options:
 
        * ## $\color{yellow}{\textsf{Hidden Message in Image Generate Key }}$
           * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
+       * by use this command you have private and public keys so you can use  to encryption the message by any one
+       * so if you encrypt the message by private key you will Decrypt the message use public key
+       * Capital "P" for private key
+       * Small   "p" For public Key
+       * rsa_alg.py -P name-Private-Key.pem   --message  Cryto.txt  --hex or --base64 --encrypt
+       * rsa_alg.py -P  name-Private-Key.pem  -M Cryto.txt " -H or -B "-E
+       * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
+       * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
+       * by defult the tool will greate folder  genrate the put key  
+       ## $\textcolor{red}{RECOMMANDED}$
+     *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT SAME ONE.FOLDER }}$
+        ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
+     * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$    
+       * To hidden Message in the Image
+       * Get image you wish to Hidden Message in the side it any exsstion 
+       * The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
+       * output  Image "PNG" exsstion
+       * user he specifies the path mssage and specifies the Image path
+       * if User will use  same Key shuode  specifies the key  For Encrypt
+       * RSA_GENKEY  will Create Folder by message name and  all out put file we store in this folder inclue the image ".png" 
+       * Keep  Put Of The Keys "PRIEVATE AND PUBLIC" aT Same One Folder so The Tool Can Dedecit The Encrypt Key abd  Decrypt Key
+
+       * ## $\color{yellow}{\textsf{Hidden Message in Image Generate Key }}$
+          * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
+          * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
+          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
+       * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$
+          *  rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" --private name-private-key.pem 
+          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H" -P name-private-key.pem
           * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
           *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
        * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$
@@ -96,27 +125,17 @@ options:
    * ### $\color{yellow}{\textsf{Deryption With  Same Pravite KEY nad Public}}$
      #### $\color{blue}{\textsf{ FOR THIS MOTHED IF ENCRYPTION DNE BE PRIEVATE KEY }}$
      #### $\color{blue}{\textsf{"DECRYPTION HAVE TO DONE BY PUBLIC KEY" }}$
-       * rsa_alg.py -P name-Private-Key.pem   --message  Cryto.txt  --hex or --base64 --encrypt
-       * rsa_alg.py -P  name-Private-Key.pem  -M Cryto.txt " -H or -B "-E
-       * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
-       * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
-       * by defult the tool will greate folder  genrate the put key  
+       * rsa_alg.py -P   name-Public-Key.pem   --file EncryptB64-Cryto --hex or --base64 --decrypt
+       * rsa_alg.py -p   name-Public-Key.pem -M Cryto.txt " -H or -B "-D
+       * rsa_alg.py -P   name-Private-Key.pem   --file EncryptB64-Cryto --hex or --base64 --decrypt
+       * rsa_alg.py -P   name-Private--Key.pem -M Cryto.txt " -H or -B "-D
+       * by defuilt the tool will generate folder to store all resulit file 
        ## $\textcolor{red}{RECOMMANDED}$
        *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIEVATE AND PUBLIC" AT SAME ONE.FOLDER }}$
           ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
-   * ### $\color{blue}{\textsf{Encryption Message hidden in Images}}$
-       * To hidden Message in the Image
-       * Get image you wish to Hidden Message in the side it any exsstion 
-       * The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
-       * output  Image "PNG" exsstion
-       * user he specifies the path mssage and specifies the Image path
-       * if User will use  same Key shuode  specifies the key  For Encrypt
-       * RSA_GENKEY  will Create Folder by message name and  all out put file we store in this folder inclue the image ".png" 
-       * Keep  Put Of The Keys "PRIEVATE AND PUBLIC" aT Same One Folder so The Tool Can Dedecit The Encrypt Key abd  Decrypt Key
-       * ### $\color{blue}{\textsf{Hidden Message in Image Generate Key}}$
-          * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
-          * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
-          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
-       * ### $\color{blue}{\textsf{Hidden Message in Image wite specifies Keys "Private or Public" }}$
-          *  rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" --private name-private-key.pem 
-          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H" -P name-private-key.pem
+   * ### $\color{blue}{\textsf{Decryption Message hidden in Images}}$
+       * use the Image png have data hidden by RSA_GENKEY tool
+       * just use --exif
+       * rsa_alg.py -I image.png -e -N
+       * the tool with make folder have all exrit data "Message- Key- Decrypt Message"
+
