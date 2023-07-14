@@ -134,7 +134,7 @@ options:
        * rsa_alg.py -I image.png -e -N
        * the tool with the make folder has all exit data "Message- Key- Decrypt Message"
 -----------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{all Command the User can Use For Encryption Base64 or Hex and Hidden in Image }}$
+## $\color{blue}{\textsf{all Command can Use For Encryption Base64 or Hex and Hidden in Image }}$
 ```
    * rsa_alg.py -M Bankaccont -E -B
    * rsa_alg.py -M Bankaccont -E -H
@@ -151,7 +151,7 @@ options:
     
 ```
 -------------------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{all Command the User can Use For Decryption Base64 or Hex and extract From Image}}$
+## $\color{blue}{\textsf{all Command can Use For Decryption Base64 or Hex and extract From Image}}$
 ```
   * rsa_alg.py -S test-Private-Key.pem -F EncryptB64-Cryto -B -D
   * rsa_alg.py -S test-Private-Key.pem -F EncryptB64-Cryto -H -D
