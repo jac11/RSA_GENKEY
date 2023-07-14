@@ -90,7 +90,7 @@ options:
         ## $\textcolor{red}{RECOMMANDED}$
      *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" IN THE SAME ONE FOLDER }}$
         ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}}$
-     * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$    
+     * ### $\color{blue}{\textsf{Encryption Message hidden in Images }}$    
        * To hide Message in the Image
        * Get the image you wish to Hidden Message on the side it any existing 
        * The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
@@ -111,14 +111,15 @@ options:
 ## $\color{blue}{\textsf{Decryption Method}}$
 -------------------------------------        
  *  ### $\color{yellow}{\textsf{ Decryption Message}}$
-       #### $\color{red}{\textsf{USER SHUDO HAVE A PUBLIC KEY TO CAN DECRYPT THE MEESSAGE}}$
+       #### $\color{red}{\textsf{THE USER SHOULD HAVE A PUBLIC KEY TO CAN DECRYPT THE MESSAGE }}$
        * "-F" For File Encrypt message
        * "-S" path of the public key to decrypt the message 
-       * rsa_alg.py -F "File Encrypt Message  patchsets of the Public key" -B "For Base64 format" -D "Decrption mspecifya_alg.py --file EncryptB64-Cryto --secret  name-Public-key.pem  or  -base64 or --hex --decrypt 
+       * rsa_alg.py -F "File Encrypt Message  patchsets of the Public key" -B "For Base64 format" -D "Decrption mspecif
+       * rsa_alg.py --file EncryptB64-Cryto --secret  name-Public-key.pem  or  -base64 or --hex --decrypt 
        * rsa_alg.py -F EncryptB64-Cryto -S name-Public-key.pem   "-B or-H" -D
    * ### $\color{yellow}{\textsf{Deryption With  Same Pravite KEY nad Public}}$
-     #### $\color{blue}{\textsf{ FOR THIS MOTHED IF ENCRYPTION DNE BE PRIVATE KEY }}$
-     #### $\color{blue}{\textsf{"DECRYPTION HAVE TO DONE BY PUBLIC KEY" }}$
+     #### $\color{blue}{\textsf{ THIS METHOD OF ENCRYPTION IS DONE BY PRIVATE KEY }}$
+     #### $\color{blue}{\textsf{"Decryption have to done by public key" }}$
        * rsa_alg.py -P   name-Public-Key.pem   --file EncryptB64-Cryto --hex or --base64 --decrypt
        * rsa_alg.py -p   name-Public-Key.pem -M Cryto.txt " -H or -B "-D
        * rsa_alg.py -P   name-Private-Key.pem   --file EncryptB64-Cryto --hex or --base64 --decrypt
@@ -129,7 +130,38 @@ options:
           ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
    * ### $\color{blue}{\textsf{Decryption Message hidden in Images}}$
        * use the Image png have data hidden by the RSA_GENKEY tool
-       * just use --EXIF
+       * just use --exif
        * rsa_alg.py -I image.png -e -N
        * the tool with the make folder has all exit data "Message- Key- Decrypt Message"
-
+-----------------------------------------------------------------------------------------
+## $\color{blue}{\textsf{all Command the User can Use For Encryption Base64 or Hex and Hidden in Image }}$
+```
+   * rsa_alg.py -M Bankaccont -E -B
+   * rsa_alg.py -M Bankaccont -E -H
+   * rsa_alg.py -M Bankaccont -E -B -P Praivte-Key.pem
+   * rsa_alg.py -M Bankaccont -E -H -P Praivte-Key.pem
+   * rsa_alg.py -M Bankaccont -E -B -P public-Key.pem
+   * rsa_alg.py -M Bankaccont -E -H -P public-Key.pem
+   * rsa_alg.py -M Bankaccont -E -B -I image.jpeg -N
+   * rsa_alg.py -M Bankaccont -E -H -I image.jpeg -N
+   * rsa_alg.py -M Bankaccont -E -B -P Praivte-Key.pem -I image.jpeg -N
+   * rsa_alg.py -M Bankaccont -E -H -P Praivte-Key.pem -I image.jpeg -N
+   * rsa_alg.py -M Bankaccont -E -B -P public-Key.pem -I image.jpeg -N
+   * rsa_alg.py -M Bankaccont -E -H -P public-Key.pem -I image.jpeg -N
+    
+```
+-------------------------------------------------------------------------------------------------
+## $\color{blue}{\textsf{all Command the User can Use For Decryption Base64 or Hex and extract From Image}}$
+```
+  * rsa_alg.py -S test-Private-Key.pem -F EncryptB64-Cryto -B -D
+  * rsa_alg.py -S test-Private-Key.pem -F EncryptB64-Cryto -H -D
+  * rsa_alg.py -P test-Private-Key.pem -F EncryptB64-Cryto -B -D
+  * rsa_alg.py -P test-Private-Key.pem -F EncryptB64-Cryto -H -D
+  * rsa_alg.py -p test-Public-Key.pem  -F EncryptB64-Cryto  -B -D
+  * rsa_alg.py -p test-public-Key.pem  -F EncryptB64-Cryto  -H -D
+  * rsa_alg.py  -I Image.png -e -H
+  * rsa_alg.py  -I Image.png -e -B 
+```
+-----------------------------------------------------------------------------------------------------
+## $\color{red}{\textsf{Connect-Developer}}$
+**jac11devel@gmail.com**
