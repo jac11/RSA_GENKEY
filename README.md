@@ -64,8 +64,8 @@ options:
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by default the tool will create a folder  to generate the put key  
        ## $\textcolor{red}{RECOMMANDED}$
-     *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" AT SAME ONE.FOLDER }}$
-        ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
+     *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" IN THE SAME ONE FOLDER }}$
+        ##### $\color{yellow}{\textsf{ O THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}$
      * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$    
        * To hide Message in the Image
        * Get the image you wish to Hidden Message on the side it any extension 
@@ -87,9 +87,9 @@ options:
        * rsa_alg.py -P name-Public-Key.pem    --message  Cryto.txt  --hex or --base64 --encrypt
        * rsa_alg.py -p  name-Public-Key.pem -M Cryto.txt " -H or -B "-E
        * by default the tool will create a folder  to generate the put key  
-       ## $\textcolor{red}{RECOMMANDED}$
-     *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" AT SAME ONE.FOLDER }}$
-        ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
+        ## $\textcolor{red}{RECOMMANDED}$
+     *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" IN THE SAME ONE FOLDER }}$
+        ##### $\color{yellow}{\textsf{ O THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}$
      * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$    
        * To hide Message in the Image
        * Get the image you wish to Hidden Message on the side it any existing 
@@ -129,7 +129,7 @@ options:
        * rsa_alg.py -P   name-Private-Key.pem   --file EncryptB64-Cryto --hex or --base64 --decrypt
        * rsa_alg.py -P   name-Private--Key.pem -M Cryto.txt " -H or -B "-D
        * by default the tool will generate a folder to store all result file 
-       ## $\textcolor{red}{RECOMMANDED}$
+       ## $\textcolor{red}{RECOMMENDED}$
        *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" AT SAME ONE.FOLDER }}$
           ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DEDECTIT THE ENCRYPT KEY AND DECRYPT KEY}}$
    * ### $\color{blue}{\textsf{Decryption Message hidden in Images}}$
