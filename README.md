@@ -42,7 +42,7 @@ options:
 
 ```
 -------------------------------------------------------------------------------------------
- # $\textcolor{blue}{Encryption -Mathed}$
+## $\color{blue}{\textsf{Encryption Method}}$
 -------------------------------------
  *  ### $\color{yellow}{\textsf{Encryption Message Different key}}$
       **User Will Decrypt the Message using the public key generated for the Cipher Message**  
@@ -50,7 +50,7 @@ options:
        * rsa_alg.py -M /home/user/Message -B -E
        * for Hex Format use  -H instead of  -B
        * rsa_alg.py -M /home/user/Message -H -E
-   * ### $\color{yellow}{\textsf{Encryption With  Same Pravite KEY and Public Key each time}}$
+   * ### $\color{yellow}{\textsf{Encryption With Same Pravite KEY and Public Key each time}}$
        * Generate Private key and public key use
        * rsa_alg.py  -K "name of the Keys"
        * rsa_alg.py  -K Test
@@ -65,8 +65,8 @@ options:
        * by default the tool will create a folder  to generate the put key  
        ## $\textcolor{red}{RECOMMANDED}$
      *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" IN THE SAME ONE FOLDER }}$
-        ##### $\color{yellow}{\textsf{ O THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}$
-     * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$    
+        ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}}$
+     ### $\color{blue}{\textsf{Encryption Message hidden in Images }}$    
        * To hide Message in the Image
        * Get the image you wish to Hidden Message on the side it any extension 
        * The RSA_GENKEY with hidden the Key For Decrypt the Meaasge auto with Message 
@@ -89,7 +89,7 @@ options:
        * by default the tool will create a folder  to generate the put key  
         ## $\textcolor{red}{RECOMMANDED}$
      *  ##### $\color{yellow}{\textsf{ KEEP  PUT OF THE KEYS "PRIVATE AND PUBLIC" IN THE SAME ONE FOLDER }}$
-        ##### $\color{yellow}{\textsf{ O THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}$
+        ##### $\color{yellow}{\textsf{ SO THE TOOL CAN DETECT THE ENCRYPTED  KEY AND DECRYPT KEY}}$
      * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$    
        * To hide Message in the Image
        * Get the image you wish to Hidden Message on the side it any existing 
@@ -104,16 +104,11 @@ options:
           * rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" 
           * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
           *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
-       * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$
+       * ### $\color{yellow}{\textsf{Encryption Message hidden in Images use  Same Pravite KEY or Public Key each time }}$
           *  rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" --private name-private-key.pem 
-          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H" -P name-private-key. pem
-          * rsa_alg.py --image Image.jpeg --message Cryto --encyrpt --hidden "--base46 or --hex" 
-          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H"
-       * ### $\color{yellow}{\textsf{Encryption Message hidden in Images }}$
-          *  rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" --private name-private-key.pem 
-          *  rsa_alg.py -I Image.jpeg -M Cryto -E -H " -B or -H" -P name-private-key. pem
+          *  rsa_alg.py -I Image.jpeg -M Cryto -E " -B or -H" -P name-private-key.pem -N
 -------------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{Decryption Mathed }}$
+## $\color{blue}{\textsf{Decryption Method}}$
 -------------------------------------        
  *  ### $\color{yellow}{\textsf{ Decryption Message}}$
        #### $\color{red}{\textsf{USER SHUDO HAVE A PUBLIC KEY TO CAN DECRYPT THE MEESSAGE}}$
