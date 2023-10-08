@@ -1,13 +1,13 @@
-# $$\color{red}{\textsf{RSA-GENKEY}}$$
-# $\color{red}{\textsf{RSA algorithm Decrypt Encrypt}}$
-## $\color{yellow}{\textsf{ what is "RSA"}}$
+# RSA-GENKEY
+# RSA algorithm Decrypt Encrypt
+## what is "RSA"
 * RSA (Rivest–Shamir–Adleman) is a public-key cryptosystem, one of the oldest, that is widely used for secure data transmission. The acronym "RSA" comes from the surnames of Ron Rivest, Adi Shamir, and Leonard Adleman, who publicly described the algorithm in 1977. An equivalent system was developed secretly in 1973 at Government Communications Headquarters (GCHQ) (the British Signals intelligence agency) by the English mathematician Clifford Cocks. That system was declassified in 1997
-###  $\color{red}{\textsf{ Learn about RSA :}}$
+### Learn about RSA 
 * [wiki-Encryption ](https://en.wikipedia.org/wiki/Encryption)
 * [techtarget](https://www.techtarget.com/searchsecurity/definition/RSA)
 * [tutorialspoint](https://www.tutorialspoint.com/cryptography_with_python/cryptography_with_python_understanding_rsa_algorithm.htm)
 -------------------------------------------------------------------------------
-## $\color{red}{\textsf{RSA-GENKEY Features}}$
+## RSA-GENKEY Features
 * support Symmetric and  asymmetric encryption
 * Key is encryption
 * output encryption file format "Base64 or HEX"
@@ -42,7 +42,7 @@ options:
 
 ```
 -------------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{{Encryption Method}}$
+## Encryption Method
 -------------------------------------
  *  ### $\color{yellow}{\textsf{Encryption Message Different key}}$
       **User Will Decrypt the Message using the public key generated for the Cipher Message**  
@@ -108,7 +108,7 @@ options:
           *  rsa_alg.py --image "Image Path" --message "Message Path" --encyrpt --hidden "--base46 or --hex" --private name-private-key.pem 
           *  rsa_alg.py -I Image.jpeg -M Cryto -E " -B or -H" -P name-private-key.pem -N
 -------------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{Decryption Method}}$
+## Decryption Method
 -------------------------------------        
  *  ### $\color{yellow}{\textsf{ Decryption Message}}$
        #### $\color{red}{\textsf{THE USER SHOULD HAVE A PUBLIC KEY TO CAN DECRYPT THE MESSAGE }}$
@@ -134,7 +134,7 @@ options:
        * rsa_alg.py -I image.png -e -N
        * the tool with the make folder has all exit data "Message- Key- Decrypt Message"
 -----------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{all Command can Use For Encryption Base64 or Hex and Hidden in Image }}$
+## all Command can Use For Encryption Base64 or Hex and Hidden in Image
 ```
    * rsa_alg.py -M Bankaccont -E -B
    * rsa_alg.py -M Bankaccont -E -H
@@ -151,7 +151,7 @@ options:
     
 ```
 -------------------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{all Command can Use For Decryption Base64 or Hex and extract From Image}}$
+## all Command can Use For Decryption Base64 or Hex and extract From Image
 ```
   * rsa_alg.py -S test-Private-Key.pem -F EncryptB64-Cryto -B -D
   * rsa_alg.py -S test-Private-Key.pem -F EncryptB64-Cryto -H -D
@@ -163,5 +163,5 @@ options:
   * rsa_alg.py  -I Image.png -e -B 
 ```
 -----------------------------------------------------------------------------------------------------
-## $\color{red}{\textsf{Connect-Developer}}$
+## Connect-Developer
 **jac11devel@gmail.com**
