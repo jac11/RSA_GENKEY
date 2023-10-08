@@ -42,7 +42,7 @@ options:
 
 ```
 -------------------------------------------------------------------------------------------
-## $\color{blue}{\textsf{Encryption Method}}$
+## $\color{blue}{\textsf{{Encryption Method}}$
 -------------------------------------
  *  ### $\color{yellow}{\textsf{Encryption Message Different key}}$
       **User Will Decrypt the Message using the public key generated for the Cipher Message**  
